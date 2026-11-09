@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#C9A46C">
+<meta name="description" content="麋鹿性偏好测试 · 你敢测吗。18 道原创情景，六维轮廓匹配 12 种麋鹿画像。成年向娱乐，非正式性心理评估。">
+<meta property="og:title" content="麋鹿性偏好测试 · 你敢测吗">
+<meta property="og:description" content="测测日记 · 六维麋鹿轮廓 · 12 种画像。成年向娱乐，不是鉴定。">
+<meta property="og:url" content="https://zengpenghui420-glitch.github.io/elk-preference/">
+<link rel="canonical" href="https://zengpenghui420-glitch.github.io/elk-preference/">
+<title>麋鹿性偏好测试 · 你敢测吗</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23121613'/%3E%3Cpath d='M16 26c0-7-1-11-5-16' fill='none' stroke='%23C9A46C' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath d='M16 26c0-7 1-11 5-16' fill='none' stroke='%23C9A46C' stroke-width='1.6' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='8' r='1.3' fill='%23E8DCC8'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#121613;--card:#1A211C;--ink:#F4EFE4;--muted:#9A917F;
+  --gold:#C9A46C;--moss:#7A9A78;--fern:#4E6B52;--blush:#C4897A;
+  --ivory:#E8DCC8;--line:#2E3830;
+  --sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px)
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{background:#0C0F0D;color-scheme:dark}
+body{
+  max-width:430px;margin:0 auto;min-height:100dvh;color:var(--ink);line-height:1.65;
+  font-family:"Songti SC","Noto Serif SC","Source Han Serif SC","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","WenQuanYi Micro Hei","Droid Sans Fallback","Microsoft YaHei",serif;
+  background:
+    radial-gradient(1px 1px at 18% 10%, rgba(232,220,200,.55) 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 6%, rgba(201,164,108,.8) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 90% 18%, rgba(232,220,200,.35) 50%, transparent 51%),
+    radial-gradient(circle at 12% -8%, rgba(201,164,108,.16), transparent 38%),
+    radial-gradient(circle at 110% 4%, rgba(122,154,120,.18), transparent 34%),
+    linear-gradient(180deg,#1C2620 0%,#121613 42%,#0E1310 100%);
+  overflow-x:hidden
+}
+body.lock{overflow:hidden}
+button,input{font-family:inherit;touch-action:manipulation}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+[hidden]{display:none !important}
+.screen{display:none}
+.screen.active{display:block}
+#start.active,#quiz.active,#loading.active{display:flex;flex-direction:column;min-height:100dvh}
+#loading.active{align-items:center;justify-content:center;text-align:center;padding:24px}
+body:not([data-age="ok"]) #quiz,
+body:not([data-age="ok"]) #loading,
+body:not([data-age="ok"]) #result,
+body:not([data-age="ok"]) #codeMask{display:none !important}
+body[data-age="ok"]:not([data-unlock="ok"]) #quiz,
+body[data-age="ok"]:not([data-unlock="ok"]) #loading{display:none !important}
+#start{padding:calc(22px + var(--st)) 22px calc(28px + var(--sb))}
+.mark{width:100%;max-width:280px;margin:4px auto 8px}
+.mark svg{width:100%;height:auto;display:block}
+.eyebrow{font-size:12px;letter-spacing:.42em;color:var(--gold);font-weight:700;text-align:center}
+h1{margin-top:10px;font-size:30px;line-height:1.28;font-weight:700;letter-spacing:.06em;text-align:center;color:var(--ivory)}
+.rule{display:flex;justify-content:center;margin:12px 0 8px}
+.rule i{width:84px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);display:block}
+.sub{text-align:center;font-size:18px;letter-spacing:.28em;color:var(--moss);margin-bottom:12px}
+.light-note,.age-block{
+  margin:0 0 14px;padding:12px 14px;border-radius:16px;
+  background:rgba(26,33,28,.88);border:1px solid var(--line);color:var(--ivory);
+  font-size:13.5px;line-height:1.7
+}
+.age-block{border-color:rgba(196,137,122,.55);color:var(--blush)}
+.dim-intro{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0 0 16px}
+.dim-intro li{display:flex;gap:10px;align-items:center;background:rgba(26,33,28,.9);border:1px solid var(--line);border-radius:16px;padding:9px 12px}
+.dim-intro i{flex:0 0 8px;width:8px;height:28px;border-radius:99px;background:linear-gradient(180deg,var(--gold),var(--fern));font-style:normal}
+.dim-intro b{display:block;font-size:14px;letter-spacing:.04em;line-height:1.35;color:var(--ivory)}
+.dim-intro span{display:block;font-size:12px;color:var(--muted);line-height:1.5}
+.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.pill{padding:5px 10px;border-radius:999px;background:rgba(26,33,28,.9);border:1px solid var(--line);color:var(--ivory);font-size:12px}
+.btn-primary{
+  width:100%;padding:15px 16px;border:none;border-radius:28px;
+  background:linear-gradient(180deg,#E4C992 0%,#C9A46C 46%,#A7844E 100%);
+  color:#1A1610;font-size:17px;font-weight:700;letter-spacing:.06em;
+  box-shadow:0 10px 22px rgba(201,164,108,.22)
+}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:disabled{opacity:.62}
+.btn-ghost{
+  width:100%;margin-top:10px;padding:13px 16px;border-radius:28px;
+  border:1.5px solid #4A4336;background:rgba(26,33,28,.72);color:var(--ivory);
+  font-size:15px;font-weight:650
+}
+.btn-ghost:active{transform:scale(.98)}
+.hint{margin-top:14px;font-size:12px;color:var(--muted);line-height:1.7;text-align:center}
+.foot-label{margin:20px 0 8px;font-size:13px;font-weight:700;letter-spacing:.18em;color:var(--gold)}
+.disclaimer,.safety{
+  margin-top:0;padding:14px 14px 14px 16px;border-radius:14px;color:var(--ink);
+  font-size:13.5px;line-height:1.75
+}
+.disclaimer{background:#1A211C;border:1px solid var(--line);border-left:4px solid var(--gold)}
+.safety{margin-top:10px;background:#171E1C;border:1px solid var(--line);border-left:4px solid var(--blush)}
+.disclaimer strong,.safety strong{color:var(--ivory);font-weight:700}
+.shop-sign{margin-top:14px;text-align:center;font-size:12px;letter-spacing:.42em;color:var(--muted)}
+.qh{
+  padding:calc(12px + var(--st)) 18px 12px;background:rgba(18,22,19,.92);
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;backdrop-filter:blur(10px)
+}
+.qrow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.qback,.qprev{background:none;border:none;color:var(--muted);font-size:14px;padding:6px 0}
+.qprog{margin-left:auto;font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.08em}
+.track{height:6px;background:#2E3830;border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--fern),var(--gold));border-radius:99px;transition:width .3s}
+.qbody{padding:22px 20px 32px}
+.qno{font-size:12px;letter-spacing:.22em;color:var(--moss);font-weight:700;margin-bottom:8px}
+.qprompt{font-size:12.5px;color:var(--muted);line-height:1.7;margin:0 0 14px}
+.qtext{font-size:20px;font-weight:700;line-height:1.55;margin-bottom:18px;color:var(--ivory)}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:14px 14px;background:rgba(26,33,28,.94);border:1.5px solid var(--line);
+  border-radius:16px;color:var(--ink);font-size:16px
+}
+.opt .onum{
+  flex:0 0 28px;width:28px;height:28px;border-radius:50%;
+  background:rgba(201,164,108,.16);color:var(--gold);font-size:13px;font-weight:700;
+  display:flex;align-items:center;justify-content:center
+}
+.opt.sel,.opt:active{border-color:var(--gold);background:rgba(201,164,108,.12);color:var(--ivory)}
+.opt.sel .onum{background:var(--gold);color:#1A1610}
+.loader{width:42px;height:42px;border:3px solid #2E3830;border-top-color:var(--gold);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto 16px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.load-title{font-weight:700;color:var(--ivory);letter-spacing:.06em}
+.load-sub{margin-top:6px;font-size:13px;color:var(--muted)}
+#result{padding-bottom:calc(188px + var(--sb))}
+.rtop{
+  position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:14px 16px;background:rgba(18,22,19,.94);border-bottom:1px solid var(--line);
+  font-size:14px;font-weight:700;backdrop-filter:blur(10px)
+}
+.rtop span:last-child{font-weight:500;color:var(--muted);font-size:12px;text-align:right}
+.result-body{padding:16px 16px 8px}
+.card{
+  position:relative;background:linear-gradient(180deg,rgba(26,33,28,.98),rgba(18,22,19,.92));
+  border:1px solid var(--line);border-radius:22px;padding:18px 16px 16px;margin-bottom:12px
+}
+.hero-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.kicker{font-size:12px;letter-spacing:.38em;color:var(--gold);font-weight:700}
+.type-title{font-size:32px;line-height:1.25;margin:6px 0 0;color:var(--ivory);letter-spacing:.04em}
+.elk-mark{flex:0 0 72px;width:72px;height:72px}
+.elk-mark svg{width:100%;height:auto;display:block}
+.elk-mark.sm{flex-basis:48px;width:48px;height:48px}
+.match-line{display:flex;align-items:baseline;gap:8px;margin-top:12px}
+.match-line b{font-size:40px;line-height:1;color:var(--gold);letter-spacing:-.02em}
+.match-line span{font-size:12px;color:var(--muted);line-height:1.45}
+.punch{margin-top:8px;font-size:16px;line-height:1.7;color:var(--ivory)}
+.egg{margin-top:10px;padding:8px 10px;border-radius:12px;background:rgba(122,154,120,.16);color:var(--moss);font-size:13px;line-height:1.55}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tag{padding:4px 10px;border-radius:999px;background:rgba(201,164,108,.16);color:var(--gold);font-size:12px;font-weight:650}
+.tag.moss{background:rgba(122,154,120,.18);color:var(--moss)}
+.tag.blush{background:rgba(196,137,122,.16);color:var(--blush)}
+.note{margin-top:12px;font-size:13.5px;color:var(--ivory);line-height:1.7}
+.note i{display:block;font-style:normal;color:var(--gold);font-size:12px;letter-spacing:.16em;margin-bottom:4px}
+.st{font-size:16px;font-weight:700;letter-spacing:.12em;margin-bottom:12px;color:var(--ivory)}
+.st:before{content:"";display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:1px;background:var(--gold);transform:translateY(-1px) rotate(45deg)}
+.fine{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.65}
+.radar-box{margin:0 -4px}
+.radar-box svg{width:100%;height:auto;display:block}
+.runner{display:flex;gap:12px;align-items:center}
+.runner .who{font-size:12px;letter-spacing:.2em;color:var(--moss);font-weight:700}
+.runner strong{display:block;font-size:18px;line-height:1.35;margin-top:2px;color:var(--ivory)}
+.runner p{margin-top:2px;font-size:13px;color:var(--muted);line-height:1.55}
+.score-grid{display:flex;flex-direction:column;margin-top:4px}
+.dim-read{padding:12px 0;border-top:1px solid var(--line)}
+.dim-read:first-child{border-top:none}
+.dim-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.dn{font-size:14px;font-weight:700;color:var(--ivory)}
+.ds{font-size:18px;font-weight:700;color:var(--gold)}
+.ds em{font-style:normal;color:var(--muted);font-weight:600;font-size:12px;margin-left:6px}
+.bar-track{height:8px;background:#2E3830;border-radius:99px;overflow:hidden;margin:6px 0 4px}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--fern),var(--gold));border-radius:99px}
+.dim-read p{font-size:13px;color:var(--muted);line-height:1.65}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:10px}
+.bullets li{position:relative;padding-left:16px;font-size:14.5px;line-height:1.7;color:var(--ink)}
+.bullets li:before{content:"";position:absolute;left:0;top:.72em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.bullets.moss li:before{background:var(--moss)}
+.bullets.blush li:before{background:var(--blush)}
+#result .disclaimer,#result .safety{margin:0 0 12px}
+#result .foot-label{margin:4px 2px 8px}
+.acts{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;
+  padding:8px 12px calc(10px + var(--sb));background:rgba(18,22,19,.96);
+  border-top:1px solid var(--line);z-index:20;display:flex;flex-direction:column;gap:6px
+}
+.acts-note{font-size:11px;color:var(--muted);text-align:center;line-height:1.45}
+.acts-row{display:flex;gap:8px}
+.acts-row button{flex:1;padding:12px 4px;border-radius:22px;font-size:13px;font-weight:700}
+.bo{border:1.5px solid #4A4336;background:#1A211C;color:var(--ivory)}
+.bp{border:none;background:linear-gradient(180deg,#E4C992,#A7844E);color:#1A1610}
+.toast{
+  position:fixed;top:auto;bottom:calc(28px + var(--sb));left:50%;transform:translateX(-50%);
+  background:rgba(244,239,228,.96);color:#1A1610;padding:10px 16px;border-radius:20px;
+  font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;
+  max-width:88%;text-align:center
+}
+body:has(#result.active) .toast{bottom:calc(168px + var(--sb))}
+.toast.show{opacity:1}
+.age-mask,.code-mask{
+  position:fixed;inset:0;background:rgba(8,10,9,.72);z-index:160;
+  display:none;align-items:center;justify-content:center;padding:20px
+}
+.code-mask{z-index:150}
+.age-mask.show,.code-mask.show{display:flex}
+.code-panel-wrap{position:relative;width:100%;max-width:360px}
+.code-panel{
+  background:#1A211C;border:1.5px solid var(--line);border-radius:22px;
+  padding:26px 18px 18px;box-shadow:0 18px 44px rgba(0,0,0,.35);text-align:center
+}
+.code-kicker{font-size:12px;letter-spacing:.28em;color:var(--gold);font-weight:700;margin-bottom:8px}
+.code-panel h3{font-size:20px;margin-bottom:8px;color:var(--ivory);letter-spacing:.06em}
+.age-copy{font-size:14px;line-height:1.7;color:var(--ivory);text-align:left;margin-bottom:14px}
+.code-panel input{
+  width:100%;padding:14px 12px;border:1.5px solid var(--line);border-radius:14px;
+  font-size:18px;letter-spacing:.18em;text-align:center;color:var(--ivory);
+  background:#121613;outline:none
+}
+.code-panel input:focus{border-color:var(--gold)}
+.code-panel input::placeholder{color:#6E675C;letter-spacing:.08em}
+.code-panel .btn-primary{margin-top:12px}
+.code-panel .btn-ghost{margin-top:8px}
+.code-error{min-height:1.35em;margin-top:8px;color:var(--blush);font-size:13px;line-height:1.5}
+.code-hint{margin-top:8px;font-size:12px;color:var(--muted);line-height:1.65;text-align:left}
+.code-close{
+  position:absolute;top:8px;right:12px;background:none;border:none;
+  font-size:22px;color:var(--muted);line-height:1;padding:4px
+}
+@media (prefers-reduced-motion:reduce){
+  .fill,.toast,.bar-fill{transition:none}
+  .loader{animation:none}
+}
+</style>
+</head>
+<body>
+<section id="start" class="screen active">
+  <div class="mark" aria-hidden="true">
+    <svg viewBox="0 0 280 150">
+      <path d="M196 42a18 18 0 1 0 0 28 13 13 0 1 1 0-28z" fill="#C9A46C"/>
+      <path d="M118 124c0-28-4-46-22-70" fill="none" stroke="#C9A46C" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M118 124c0-28 4-46 24-70" fill="none" stroke="#C9A46C" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M104 78c-12-2-20 4-26-4" fill="none" stroke="#C9A46C" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M132 78c12-2 22 4 28-6" fill="none" stroke="#C9A46C" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M46 126l14-34 14 34z" fill="#4E6B52"/>
+      <path d="M52 126l8-18 8 18z" fill="#7A9A78"/>
+      <path d="M36 126h168" stroke="#2E3830" stroke-width="1.2"/>
+      <circle cx="168" cy="36" r="1.4" fill="#E8DCC8"/>
+      <circle cx="78" cy="48" r="1.1" fill="#E8DCC8"/>
+    </svg>
+  </div>
+  <p class="eyebrow">测测日记</p>
+  <h1>麋鹿性偏好测试</h1>
+  <div class="rule" aria-hidden="true"><i></i></div>
+  <p class="sub">你敢测吗</p>
+  <p class="light-note">成年向娱乐，非正式性心理评估。用森林、节奏和光线，看你亲近时更习惯怎样走。偏好没有高低，也不是任何鉴定。</p>
+  <p class="age-block" id="ageBlock" hidden>未满 18 岁不能进入本测试。题目和验证码都不会打开。</p>
+  <button class="btn-primary" id="btnStart" type="button">开始测试</button>
+  <button class="btn-ghost" id="btnCodeEntry" type="button">已有码，直接进入</button>
+  <button class="btn-ghost" id="btnLast" type="button" hidden>查看上次结果</button>
+  <p class="hint">本测试仅面向 18 岁以上成年人。进入前请确认你已满 18 周岁。作答只留在本机，不会作为答案上传。</p>
+  <ul class="dim-intro">
+    <li><i></i><div><b>牵引锋芒</b><span>你有多习惯自己先伸出那对角、定下靠近的节奏</span></div></li>
+    <li><i></i><div><b>交付柔软</b><span>你有多容易把方向交出去、跟着对方的节奏走</span></div></li>
+    <li><i></i><div><b>情热浓度</b><span>你对「被点燃、空气被拉紧」的渴望有多浓</span></div></li>
+    <li><i></i><div><b>柔情缠绕</b><span>你有多需要被看见、被珍惜、被铺一层温柔</span></div></li>
+    <li><i></i><div><b>探索半径</b><span>你更想留在熟悉的小径，还是偶尔换一条没走过的路</span></div></li>
+    <li><i></i><div><b>直言尺度</b><span>你能多直接地说出想要什么、不喜欢什么</span></div></li>
+  </ul>
+  <div class="pills"><span class="pill">18 道情景</span><span class="pill">六维轮廓</span><span class="pill">12 种麋鹿</span><span class="pill">仅 18+</span></div>
+  <footer>
+    <p class="foot-label">请先读这里</p>
+    <p class="disclaimer" id="startDisclaimer"></p>
+    <p class="safety" id="startSafety"></p>
+    <p class="shop-sign">测测日记</p>
+  </footer>
+</section>
+
+<section id="quiz" class="screen" inert>
+  <div class="qh">
+    <div class="qrow">
+      <button class="qback" id="qback" type="button">退出</button>
+      <button class="qprev" id="qprev" type="button" hidden>上一题</button>
+      <span class="qprog" id="qprog"></span>
+    </div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+  </div>
+  <div class="qbody">
+    <div class="qno" id="qno"></div>
+    <p class="qprompt" id="qprompt"></p>
+    <div class="qtext" id="qtext"></div>
+    <div class="opts" id="opts"></div>
+  </div>
+</section>
+
+<section id="loading" class="screen">
+  <div class="loader" aria-hidden="true"></div>
+  <div class="load-title">夜林正在把六条小径对齐</div>
+  <div class="load-sub">看看你是哪一只麋鹿</div>
+</section>
+
+<section id="result" class="screen">
+  <div class="rtop"><span>麋鹿性偏好测试</span><span id="resultMeta"></span></div>
+  <div class="result-body" id="resultBody"></div>
+  <div class="acts">
+    <p class="acts-note">成年向娱乐 · 非正式评估 · 重新测试会再扣 1 次</p>
+    <div class="acts-row">
+      <button class="bo" id="btnViewLast" type="button">查看上次</button>
+      <button class="bo" id="btnCopy" type="button">复制文案</button>
+    </div>
+    <div class="acts-row">
+      <button class="bp" id="btnRetry" type="button">重新测试</button>
+    </div>
+  </div>
+</section>
+
+<div class="age-mask" id="ageMask" aria-hidden="true">
+  <div class="code-panel-wrap">
+    <button class="code-close" id="ageClose" type="button" aria-label="关闭">×</button>
+    <div class="code-panel" role="dialog" aria-modal="true" aria-labelledby="ageTitle">
+      <p class="code-kicker">18+</p>
+      <h3 id="ageTitle">请先确认年龄</h3>
+      <p class="age-copy" id="ageCopy"></p>
+      <button class="btn-primary" id="btnAgeOk" type="button">我已满 18 岁</button>
+      <button class="btn-ghost" id="btnAgeNo" type="button">我未满 18 岁</button>
+    </div>
+  </div>
+</div>
+
+<div class="code-mask" id="codeMask" aria-hidden="true">
+  <div class="code-panel-wrap">
+    <button class="code-close" id="codeClose" type="button" aria-label="关闭">×</button>
+    <div class="code-panel" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+      <p class="code-kicker">测测日记</p>
+      <h3 id="codeTitle">输入验证码</h3>
+      <input id="codeInput" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="16" placeholder="EL****" aria-label="验证码">
+      <p class="code-error" id="codeError" role="alert"></p>
+      <button class="btn-primary" id="btnCodeOk" type="button">开始答题</button>
+      <p class="code-hint">每码可测 3 次。重新测试会再扣 1 次；查看上次结果不扣次。感到不适可以随时离开。</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><p style="padding:24px;text-align:center">请开启 JavaScript 后使用本测验。</p></noscript>
+<script>
+'use strict';
+const API_BASE='https://snappy-tundra-7uesdvk.tmp.now';
+const QUIZ_KEY='elk';
+const ACCESS_KEY='elk_unlocked';
+const ACCESS_CODE_KEY='elk_code';
+const LAST_KEY='elk_last_result';
+const AGE_KEY='elk_age_ok';
+const CODE_RE=/^EL[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}$/i;
+const PAGE_URL='https://zengpenghui420-glitch.github.io/elk-preference/';
+const DISCLAIMER='本测试为面向成年人的娱乐向自我观察，非正式性心理测量或临床评估，不能替代专业心理咨询、性健康咨询或医疗建议。题目用隐喻和日常情景描述亲近时的节奏与表达习惯，不涉及具体行为指导，也不对任何人的偏好做道德评判。「麋鹿」只是一种趣味画像，结果会受当下心情与理解方式影响；图一乐、拿去分享都可以，别把它当成性取向鉴定、人格判决或关系诊断书。';
+const SAFETY_NOTE='偏好没有高低对错，只要建立在自愿、尊重和清晰界限上。若题目让你不适，随时可以离开。若亲密关系中出现强迫、伤害或不被尊重，请寻求可信赖的人或正规支持，而不是用一份娱乐测试替你做决定。';
+const AGE_TEXT='本测试仅面向 18 岁以上成年人。进入前请确认你已满 18 周岁。';
+const PROMPT_TEXT='请按你近来在亲密关系里更常见的状态来选，第一反应即可。没有标准答案，也没有哪一种麋鹿更高一等。本测试只谈节奏与表达习惯，不询问具体行为。';
+const CHOICES=[
+  {v:1,t:'完全不像我'},
+  {v:2,t:'不太像'},
+  {v:3,t:'说不清'},
+  {v:4,t:'有点像'},
+  {v:5,t:'非常像我'}
+];
+const DIM_IDS=['L','Y','H','R','E','S'];
+const DIM_META={
+  L:{name:'牵引锋芒',high:'靠近时你更常自己先开口、先定节奏，像先把那对角伸进夜里。',mid:'你可以带路，也会把步子让一让，看今晚谁先迈。',low:'你很少自己带路，更愿意等对方先走出那一步。'},
+  Y:{name:'交付柔软',high:'被信任的人带着时，你更容易放松，把方向交出去。',mid:'你会交出一段路，但手还留着，不会一次松到底。',low:'即使喜欢对方，你也很难真正松手，节奏多半还在自己这边。'},
+  H:{name:'情热浓度',high:'你更渴望空气被拉紧、心跳加快的时刻；只有温柔陪着，会觉得还没到。',mid:'浓一点或淡一点你都待得住，热度不是你唯一的路标。',low:'你更喜欢温和、慢热的靠近，太浓的张力会让你想退半步。'},
+  R:{name:'柔情缠绕',high:'没有被看见、被珍惜的感觉，你很难真正投入。',mid:'温柔你会收下，但不是每一步都要先铺得很厚。',low:'你不必先铺很厚的浪漫，也能把步子迈近。'},
+  E:{name:'探索半径',high:'没走过的小径会让你好奇，你愿意偶尔换一种靠近的节奏。',mid:'熟悉的路你认得，新的路也可以试一试。',low:'你更愿意留在已知、安全、已经磨合好的方式里。'},
+  S:{name:'直言尺度',high:'你宁可把想要和不喜欢讲明白，也不靠对方来猜。',mid:'你能说一些，有时仍会用暗示代替一整句。',low:'直接说出口会让你卡住，你更习惯用暗示、表情或沉默。'}
+};
+const BAND={L:1,M:2,H:3};
+const QS=[
+  {id:'L1',dim:'L',text:'亲密靠近时，我更习惯自己先伸出手、定下今晚的节奏，而不是等对方来安排。'},
+  {id:'L2',dim:'L',text:'如果两个人都在等，我通常会先开口：要不要靠近一点、今晚想怎么相处。'},
+  {id:'L3',dim:'L',text:'在亲密的时候，我很少主动带路，更想让对方先决定方向。',rev:true},
+  {id:'Y1',dim:'Y',text:'当我信任的人轻轻带着我走，我会明显更放松，像把方向交出去一样安心。'},
+  {id:'Y2',dim:'Y',text:'对方把计划和节奏都安排好时，我反而更容易投入，而不是焦虑。'},
+  {id:'Y3',dim:'Y',text:'即使很喜欢对方，我也很难真正把主导权交出去，总会下意识自己抓住节奏。',rev:true},
+  {id:'H1',dim:'H',text:'对我来说，亲密不只是温柔陪着，我更渴望那种空气被拉紧、心跳加速的时刻。'},
+  {id:'H2',dim:'H',text:'如果相处一直很温柔、很安全，却很少有被点燃的感觉，我会隐隐觉得少了点什么。'},
+  {id:'H3',dim:'H',text:'我更享受温和、慢热、不把气氛绷太紧的靠近，太浓的张力会让我想退半步。',rev:true},
+  {id:'R1',dim:'R',text:'没有被看见、被珍惜的感觉时，再怎么靠近我都很难真正投入。'},
+  {id:'R2',dim:'R',text:'我需要一点仪式感：一句话、一盏灯、一段被认真对待的前奏，亲密才像完整的。'},
+  {id:'R3',dim:'R',text:'对我来说，亲密不必先铺很厚的浪漫，直接靠近也完全可以。',rev:true},
+  {id:'E1',dim:'E',text:'熟悉的相处方式让我安心，但我也乐意偶尔换一条没走过的小径，试试新的节奏。'},
+  {id:'E2',dim:'E',text:'听到「要不要试一种我们没试过的靠近方式」，我通常会好奇，而不是立刻防备。'},
+  {id:'E3',dim:'E',text:'我更愿意把亲密留在已知、安全、已经磨合好的方式里，不太想随便开拓新地图。',rev:true},
+  {id:'S1',dim:'S',text:'我想要什么、不喜欢什么，我大致能用话说清楚，而不是指望对方来猜。'},
+  {id:'S2',dim:'S',text:'即使有点不好意思，我也宁可把偏好讲明白，免得两个人都在猜谜。'},
+  {id:'S3',dim:'S',text:'直接说出自己的想要或界限会让我卡住，我更习惯用暗示、表情或沉默让对方领会。',rev:true}
+];
+const ELKS=[
+  {id:'NIGHT_LEAD',name:'夜林领头鹿',pattern:'HLHMMH',punch:'森林里先亮起来的，往往是你那对角',half:'习惯自己先伸出那对角',
+    traits:['亲密靠近时，你常先伸出手、先开口。','你习惯自己定下今晚的节奏，而不是把决定权空着。','空气被拉紧时，你更有精神。','你能把想要的事说清楚。','一直被等待、一直被猜，你会不耐烦。'],
+    others:['对方容易感到被带着走，安心或紧张都可能有。','有人会觉得你可靠。','也有人会觉得你太会做主。'],
+    advice:['带路是天赋。问一句「你今晚想怎么走」，不会让你变弱。','给对方留出拒绝或改道的空隙。','主动，不等于要负责整座森林的气氛。','你也可以停半步，让对方的声音先到。'],
+    tags:['先伸出角','自己定节奏','说得清楚'],
+    note:'你让路亮起来——也记得回头看一眼，身后的人是否真的想跟上来。'},
+  {id:'MOON_YIELD',name:'温驯月光鹿',pattern:'LHMHLM',punch:'有人稳稳走在前面时，你才肯把步子放软',half:'有人在前面时才肯放软步子',
+    traits:['信任的人带着你时，你明显更放松。','计划被安排好，你更容易投入。','你需要一点被珍惜的感觉，才肯把步子放软。','你不太抢着开口定方向。','熟悉的相处方式让你更有安全感。'],
+    others:['细心的人会觉得你很好配合、很好被照顾。','粗心的人可能误以为你没有主张。','你的安静里，其实有自己的想要。'],
+    advice:['交付是信任，不是没有声音。','你仍然可以说「今晚我想慢一点」。','把主导权交出去之前，确认对方是你选的，不是你习惯忍受的。','被带着很舒服的时候，也留一句属于你的话。'],
+    tags:['被带着才松','要被珍惜','熟悉才安心'],
+    note:'月光很美，可月光也该照见你自己的想要。'},
+  {id:'PURE_FLORA',name:'纯爱花鹿',pattern:'MMLHLM',punch:'你要的不是把空气烧着，是先被温柔地看见',half:'要先被温柔地看见',
+    traits:['你先要被看见、被认真对待，靠近才像完整的。','太浓、太快的张力会让你想退半步。','你并不拒绝亲密，只是希望它先长在温柔里。','你不太急着换新地图。','节奏可以由你或对方来，但气氛不能冷冰冰。'],
+    others:['别人会觉得你讲究、慢热、很看重感觉。','性急的人可能抱怨你「不够热情」，其实你要的是温度对得上。','被认真对待时，你会自己靠近。'],
+    advice:['温柔不是落后。','可以坦白：我需要先被当成喜欢的人，而不只是靠近的对象。','不必为了证明自己开放，去走你还没准备好的路。','你的季节到了，不用催。'],
+    tags:['先被看见','要温柔铺垫','不赶着点燃'],
+    note:'花开有自己的季节。催开的不是浪漫，是压力。'},
+  {id:'DARK_EMBER',name:'暗火岩鹿',pattern:'LMHLML',punch:'你不爱宣布火在哪里，可靠近的人都知道岩石是热的',half:'不宣布，火却是热的',
+    traits:['你不太宣布自己想要什么，可亲近时的浓度并不低。','浪漫仪式可有可无，空气一紧你反而更在状态。','你很少主动做长篇解释。','外表可能安静，里面不一定淡。','你让人靠近了才发现，岩石是热的。'],
+    others:['粗心的人会觉得你冷，或难以读懂。','靠近了的人会发现，你比表面上热得多。','你不靠宣布来证明自己在意。'],
+    advice:['火可以藏，路标最好有一个，免得对的人走过。','试着把一句具体的喜欢说出口。','沉默很有味道，可界限也需要被听见。','让信任的人知道怎么靠近，才不会被误认成冰。'],
+    tags:['外表安静','里面有火','不爱宣布'],
+    note:'岩石下的温度是真的——让信任的人知道怎么靠近，才不会被误认成冰。'},
+  {id:'EQUAL_ANTLER',name:'对等双角',pattern:'MMMMMM',punch:'你很少独霸一条路，也很少把自己完全交出去',half:'很少独霸，也很少完全交出去',
+    traits:['你既能偶尔带路，也能被带一段。','亲密里你很少极端地抢方向，或彻底松手。','热度、浪漫、熟悉与新意，对你都是中等剂量。','你看重来回，而不是谁永远说了算。','你很少把整座林子收成一个人的路线。'],
+    others:['对方常觉得和你相处公平、好商量。','有时也会有人觉得你「怎么都可以」，因而听不清你的偏好。','旗鼓相当的时候，你最放松。'],
+    advice:['平衡是优点，不是没有味道。','轮到你在意的时候，把那一点说具体。','旗鼓相当也需要有人先走半步。','你也可以有今晚更想要的那一面。'],
+    tags:['来回换手','剂量适中','好商量'],
+    note:'双角相对，不是谁把谁磨平——你也可以有今晚更想要的那一面。'},
+  {id:'SLOW_SPRING',name:'慢热春鹿',pattern:'LMLHLL',punch:'你要一点阳光、一点时间，春天才会从蹄印里长出来',half:'要一点时间，春天才长出来',
+    traits:['你需要时间、安全和被珍惜的感觉，热度才会慢慢上来。','你很少自己先定节奏。','你不太把想要直接说出口。','熟悉的相处让你安心，突然的新地图会让你缩一下蹄。','一旦春天来了，你的投入往往比看上去深。'],
+    others:['性急的人觉得你慢。','耐心的人会看到你后来的认真。','你不是没有温度，你是温度来得晚。'],
+    advice:['慢不是缺陷。你可以说「我要再暖一会儿，再靠近」。','你不必用立刻被点燃来证明喜欢。','选愿意等春天的人，比逼自己变成夏天更重要。','熟悉的路不是落后，是你的根。'],
+    tags:['要时间','慢才深','不爱突然'],
+    note:'蹄印里的草是自己长的。谁肯等，谁才配看见春天。'},
+  {id:'PATHFINDER',name:'游林探鹿',pattern:'HMMMHH',punch:'熟悉的小径你认得，没走过的那条更让你耳朵竖起来',half:'没走过的路更让耳朵竖起来',
+    traits:['你常先开口、先提议。','没试过的靠近方式会让你耳朵竖起来。','你能把想法讲明白。','你也可以跟随，但不喜欢这座森林永远只有一条老路。','好奇不等于没有界限。'],
+    others:['对方会觉得跟你在一起有新意、有邀请。','有时也会担心跟不上你换地图的速度。','你的提议通常听得懂，因为它是说出来的。'],
+    advice:['探索前先问一句愿不愿意，好奇才不会变成推着走。','给熟悉的小径留位置，那也是你们的家。','新路径要双方都想走，才算一起旅行。','竖起的耳朵是礼物，旁边的人也要被问到。'],
+    tags:['先提议','爱新小径','讲得明白'],
+    note:'竖起的耳朵是礼物。记得问问身边的人，是不是也想进那片没走过的林子。'},
+  {id:'NIGHT_SENSE',name:'感官夜行鹿',pattern:'MMHLHM',punch:'你靠光线、气息和气氛认路，不一定靠长篇解释',half:'靠气氛认路',
+    traits:['你对气氛、光线、气息很敏感。','空气被拉紧时，你更有感觉。','浪漫口号不一定能打动你，现场的氛围可以。','你愿意试试不同的靠近方式。','你不是最爱用长篇解释的那一个。'],
+    others:['懂气氛的人会觉得和你很合拍。','只靠讲道理的人，可能摸不着让你投入的那一下。','你的投入常常先出现在现场，而不是在说明里。'],
+    advice:['对气氛敏感是天赋，也可以补一句人话，让对方知道怎样的夜晚让你舒服。','新意很好，同意仍然要清楚。','感觉比口号诚实，界限也同样诚实。','把气氛翻译成一句对方听得懂的话。'],
+    tags:['靠气氛认路','要被点燃','少靠讲道理'],
+    note:'夜行靠感觉，不靠口号——感觉也该被翻译成一句对方听得懂的话。'},
+  {id:'LETTER_DEER',name:'信笺情鹿',pattern:'MMMHLH',punch:'你把想要的事写成能被听懂的句子，亲近才算完整',half:'想要的事要能被听懂',
+    traits:['你看重被看见、被好好说话。','你能、也更愿意把想要与不想要说清楚。','你不太急着换新方式，熟悉而被理解让你更安心。','热度中等，但没有表达的亲近会让你觉得缺了一页。','你怕的不是说话，是两个人各自猜。'],
+    others:['对方会觉得你讲得清楚、好沟通。','不爱说话的人可能觉得你话多，其实你是怕误会。','你的界限一旦写明，就希望被当真。'],
+    advice:['把话说清楚是善意，不是破坏气氛。','也给沉默留一点空白，不是每句话都要写成信。','你的界限一旦写明，就要被当真。','你值得一个愿意听完的人，而不是一个让你一直解释的人。'],
+    tags:['能说出口','要被理解','熟悉更安心'],
+    note:'信写出来是为了被读到。你值得一个愿意回信的人，而不是一个让你一直解释的人。'},
+  {id:'VALLEY_TRUST',name:'深谷交托鹿',pattern:'LHMHML',punch:'一旦你把后背交给谁，整座谷都会为那个人安静下来',half:'交出去的时候会很深',
+    traits:['一旦信任谁，你很容易把节奏交给对方。','被珍惜时，你更投入。','你不太抢着带路，也不太把想要直接说破。','你愿意在信任里尝试一点新意，但开口仍然困难。','你交出去的时候，往往交得很深。'],
+    others:['被你交托的人会感到很被信任。','辜负这一点的人，造成的伤害也会更深。','你的安静不是无所谓，是把后背递了出去。'],
+    advice:['交托是很深的礼物。先看清对方会不会问你要什么、会不会尊重你说停。','练习一句短的「我想要」或「我不想」。','把后背交给人，不等于把所有解释权也交出去。','请选会轻轻接住的人。'],
+    tags:['信任才松手','开口困难','交出去会很深'],
+    note:'深谷很安静，也因此回声很大。把后背交给谁，请选会轻轻接住的人。'},
+  {id:'LAMP_SHEPHERD',name:'掌灯牧鹿',pattern:'HLMHMH',punch:'你带路，但你会先把灯点上，好让对方看清脚下',half:'先点灯，再带路',
+    traits:['你习惯带路，但你会先把灯点上：问一句、铺一点温柔、把节奏说清楚。','你要气氛，也要对方被照顾到。','热度不是最猛的那种，可你很会创造让人安心靠近的夜晚。','你能把偏好讲明白。','你让人看清脚下，自己有时忘了看自己的方向。'],
+    others:['很多人会觉得被你带着很安全，也被看见。','偶尔有人会依赖你把一切安排好，连自己的声音都省了。','你的灯很暖，旁边的人容易把选择权塞回你手里。'],
+    advice:['掌灯是温柔，不是承包整段关系里所有的照顾。','你也可以说「今晚我想被带着走」。','确认对方是跟你走，不是把选择权塞回你手里就消失。','也给自己留一盏灯。'],
+    tags:['先点灯再带路','会照顾','说得清楚'],
+    note:'你让人看清脚下——也给自己留一盏灯，照见你自己想去的方向。'},
+  {id:'FOG_SIDE',name:'雾里并走鹿',pattern:'MHLMLM',punch:'你不想谁把谁拖着跑，只想在雾里肩并着肩走完这段',half:'想在雾里肩并着肩',
+    traits:['你更想并肩，而不是谁把谁拖着跑。','你容易跟随，不太会把气氛绷得很紧。','中等的被看见就够，浓烈的浪漫或强烈的点燃都不是你的第一需要。','熟悉的路让你安心，突然改道会让你在雾里停住。','你不是没有想要，你是不想被推着跑。'],
+    others:['对方会觉得你好相处、好商量、不施压。','有时也会被误读成你什么都不想要，其实你只是不想被推着跑。','雾里走在你旁边，比被你拉着跑更接近你。'],
+    advice:['并肩也可以有主张。试着说「今晚我想这样，不想那样」。','温和不是空白。','如果对方步子太大，你可以停下来，等雾散一点再走。','谁走太快，你都有权轻轻拉住袖口。'],
+    tags:['并肩走','不爱被推','要熟悉的路'],
+    note:'雾里最舒服的是肩并着肩。谁走太快，你都有权轻轻拉住袖口。'}
+];
+
+let deck=[], qi=0, ans={}, picking=false, codeBusy=false, current=null, tick=0;
+let pendingIntent=null, pendingCode='', ageMem=false, unlockMem=false, codeMem='';
+
+function $(id){return document.getElementById(id)}
+function el(tag, cls, text){
+  const n=document.createElement(tag);
+  if(cls) n.className=cls;
+  if(text!=null) n.textContent=text;
+  return n;
+}
+function esc(s){return String(s).replace(/[&<>"']/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function show(id){
+  if((id==='quiz' || id==='loading') && (!isAgeOk() || !isUnlocked())) id='start';
+  if(id==='result' && !isAgeOk()) id='start';
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  const node=$(id);
+  if(node) node.classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='start') refreshStartBtn();
+}
+function toast(msg){
+  const t=$('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toast._tm);
+  toast._tm=setTimeout(function(){t.classList.remove('show')},2400);
+}
+function setCodeError(msg){const n=$('codeError'); if(n) n.textContent=msg||''}
+function itemScore(q,v){return q.rev?6-v:v}
+function to100(mean){return Math.round(Math.max(0,Math.min(100,((mean-1)/4)*100)))}
+function bandOf(score){
+  if(score<=33) return 'L';
+  if(score<=66) return 'M';
+  return 'H';
+}
+function bandLabel(score){
+  if(score<=33) return '偏低';
+  if(score<=66) return '中等';
+  return '偏高';
+}
+function dimRead(id,score){
+  const m=DIM_META[id];
+  if(score>=67) return m.high;
+  if(score<=33) return m.low;
+  return m.mid;
+}
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    const t=a[i]; a[i]=a[j]; a[j]=t;
+  }
+  return a;
+}
+function scoreFromMap(map){
+  if(!map) return null;
+  const buckets={L:[],Y:[],H:[],R:[],E:[],S:[]};
+  for(let i=0;i<QS.length;i++){
+    const q=QS[i];
+    const v=map[q.id];
+    if(typeof v!=='number' || v<1 || v>5) return null;
+    buckets[q.dim].push(itemScore(q,v));
+  }
+  const scores={};
+  for(let d=0;d<DIM_IDS.length;d++){
+    const id=DIM_IDS[d];
+    const arr=buckets[id];
+    if(arr.length!==3) return null;
+    const mean=arr.reduce(function(s,x){return s+x},0)/arr.length;
+    scores[id]=to100(mean);
+  }
+  return scores;
+}
+function patternOf(scores){return DIM_IDS.map(function(id){return bandOf(scores[id])}).join('')}
+function manhattan(a,b){
+  let d=0;
+  for(let i=0;i<6;i++) d+=Math.abs(BAND[a[i]]-BAND[b[i]]);
+  return d;
+}
+function exactCount(a,b){
+  let n=0;
+  for(let i=0;i<6;i++) if(a[i]===b[i]) n++;
+  return n;
+}
+function matchElks(scores){
+  const user=patternOf(scores);
+  const rows=ELKS.map(function(f,index){
+    const dist=manhattan(user,f.pattern);
+    return {index:index,id:f.id,dist:dist,exact:exactCount(user,f.pattern),similarity:Math.max(0,Math.round((1-dist/12)*100))};
+  });
+  rows.sort(function(a,b){return a.dist-b.dist || b.exact-a.exact || a.index-b.index});
+  return {user:user,best:rows[0],runner:rows[1]};
+}
+function brewing(scores){return DIM_IDS.every(function(id){return scores[id]>=45 && scores[id]<=55})}
+function analyze(scores){
+  const m=matchElks(scores);
+  const best=ELKS[m.best.index];
+  const runner=ELKS[m.runner.index];
+  return {
+    scores:scores,
+    pattern:m.user,
+    elkId:best.id,
+    name:best.name,
+    punch:best.punch,
+    traits:best.traits,
+    others:best.others,
+    advice:best.advice,
+    tags:best.tags,
+    note:best.note,
+    half:best.half,
+    similarity:m.best.similarity,
+    runnerId:runner.id,
+    runnerName:runner.name,
+    runnerHalf:runner.half,
+    brewing:brewing(scores)
+  };
+}
+function fillMarked(node, text, marks){
+  node.textContent='';
+  const re=new RegExp('('+marks.map(function(m){return m.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}).join('|')+')');
+  text.split(re).forEach(function(part){
+    if(marks.indexOf(part)>=0) node.appendChild(el('strong',null,part));
+    else if(part) node.appendChild(document.createTextNode(part));
+  });
+}
+function fillDisclaimer(node){
+  fillMarked(node, DISCLAIMER, ['非正式性心理测量或临床评估','不能替代专业心理咨询、性健康咨询或医疗建议','不涉及具体行为指导','也不对任何人的偏好做道德评判','别把它当成性取向鉴定、人格判决或关系诊断书']);
+}
+function fillSafety(node){
+  fillMarked(node, SAFETY_NOTE, ['偏好没有高低对错','只要建立在自愿、尊重和清晰界限上','若题目让你不适，随时可以离开']);
+}
+function elkMark(id){
+  const gold='#C9A46C', moss='#7A9A78', blush='#C4897A', ivory='#E8DCC8';
+  const map={
+    NIGHT_LEAD:gold, MOON_YIELD:ivory, PURE_FLORA:blush, DARK_EMBER:gold,
+    EQUAL_ANTLER:ivory, SLOW_SPRING:moss, PATHFINDER:moss, NIGHT_SENSE:gold,
+    LETTER_DEER:ivory, VALLEY_TRUST:moss, LAMP_SHEPHERD:gold, FOG_SIDE:blush
+  };
+  const c=map[id]||gold;
+  return '<svg viewBox="0 0 72 72" aria-hidden="true"><path d="M36 58c0-16-2-24-8-34" fill="none" stroke="'+c+'" stroke-width="1.7" stroke-linecap="round"/><path d="M36 58c0-16 2-24 8-34" fill="none" stroke="'+c+'" stroke-width="1.7" stroke-linecap="round"/><path d="M30 36c-6-1-10 2-12-2" fill="none" stroke="'+c+'" stroke-width="1.3" stroke-linecap="round"/><path d="M42 36c6-1 10 2 12-2" fill="none" stroke="'+c+'" stroke-width="1.3" stroke-linecap="round"/><circle cx="52" cy="16" r="2.2" fill="'+ivory+'"/><path d="M18 62h36" stroke="#2E3830" stroke-width="1"/></svg>';
+}
+function radarSVG(r){
+  const dims=DIM_IDS.map(function(id){return {name:DIM_META[id].name, score:r.scores[id]}});
+  const cx=200, cy=198, R=78, n=dims.length;
+  const pt=function(i,v){
+    const a=-Math.PI/2+(i*2*Math.PI)/n;
+    const rr=Math.max(0,Math.min(100,v))/100*R;
+    return [cx+rr*Math.cos(a), cy+rr*Math.sin(a)];
+  };
+  let rings='', axes='', nums='';
+  [25,50,75,100].forEach(function(k){
+    const pts=[];
+    for(let i=0;i<n;i++) pts.push(pt(i,k).map(function(v){return v.toFixed(1)}).join(','));
+    const strong=k===50||k===100;
+    rings+='<polygon points="'+pts.join(' ')+'" fill="'+(k===100?'rgba(201,164,108,0.06)':'none')+'" stroke="'+(strong?'#7A9A78':'#2E3830')+'" stroke-width="'+(strong?'1.5':'1')+'"/>';
+    const wedge=-Math.PI/3;
+    const sx=cx+(k/100)*R*Math.cos(wedge);
+    const sy=cy+(k/100)*R*Math.sin(wedge);
+    nums+='<text x="'+sx.toFixed(1)+'" y="'+sy.toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#9A917F" stroke="#1A211C" stroke-width="3" paint-order="stroke">'+k+'</text>';
+  });
+  for(let i=0;i<n;i++){
+    const p=pt(i,100);
+    axes+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="#2E3830" stroke-width="1"/>';
+  }
+  const poly=dims.map(function(d,i){return pt(i,d.score).map(function(v){return v.toFixed(1)}).join(',')}).join(' ');
+  const dots=dims.map(function(d,i){
+    const p=pt(i,d.score);
+    return '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="#F4EFE4" stroke="#C9A46C" stroke-width="2"/>';
+  }).join('');
+  let labels='';
+  const halo=' stroke="#121613" stroke-width="4" paint-order="stroke"';
+  dims.forEach(function(d,i){
+    const a=-Math.PI/2+(i*2*Math.PI)/n;
+    const lr=R+46;
+    const x=cx+lr*Math.cos(a);
+    const y=cy+lr*Math.sin(a);
+    const anchor=Math.abs(Math.cos(a))<0.35?'middle':(Math.cos(a)>0?'start':'end');
+    labels+='<text x="'+x.toFixed(1)+'" y="'+(y-8).toFixed(1)+'" text-anchor="'+anchor+'" font-size="14" fill="#F4EFE4"'+halo+'>'+esc(d.name)+'</text>';
+    labels+='<text x="'+x.toFixed(1)+'" y="'+(y+12).toFixed(1)+'" text-anchor="'+anchor+'" font-size="15" font-weight="700" fill="#C9A46C"'+halo+'>'+d.score+'</text>';
+  });
+  const aria='麋鹿轮廓六维雷达，刻度 0 到 100。'+dims.map(function(d){return d.name+' '+d.score}).join('，');
+  return '<svg viewBox="0 0 400 420" role="img" aria-label="'+esc(aria)+'">'+
+    rings+axes+
+    '<polygon points="'+poly+'" fill="rgba(201,164,108,0.28)" stroke="#C9A46C" stroke-width="2.4" stroke-linejoin="round"/>'+
+    dots+nums+labels+'</svg>';
+}
+function bulletList(items, cls){
+  const ul=el('ul','bullets'+(cls?(' '+cls):''));
+  items.forEach(function(t){ul.appendChild(el('li',null,t))});
+  return ul;
+}
+function renderResult(r){
+  current=r;
+  const root=$('resultBody');
+  root.textContent='';
+  $('result').dataset.elk=r.elkId;
+  $('result').dataset.sim=String(r.similarity);
+  $('result').dataset.runner=r.runnerId;
+  $('resultMeta').textContent=r.name+' · 匹配度 '+r.similarity+'%';
+
+  const hero=el('section','card');
+  const head=el('div','hero-head');
+  const copy=el('div');
+  copy.appendChild(el('p','kicker','主导麋鹿画像'));
+  const title=el('h2','type-title',r.name);
+  title.id='typeTitle';
+  copy.appendChild(title);
+  head.appendChild(copy);
+  const mark=el('div','elk-mark');
+  mark.innerHTML=elkMark(r.elkId);
+  head.appendChild(mark);
+  hero.appendChild(head);
+  const match=el('div','match-line');
+  const num=el('b',null,r.similarity+'%');
+  num.id='matchNum';
+  match.appendChild(num);
+  match.appendChild(el('span',null,'匹配度 · 轮廓有多近，不是高低分'));
+  hero.appendChild(match);
+  hero.appendChild(el('p','punch',r.punch));
+  if(r.brewing){
+    const egg=el('p','egg','这夜的森林还在起雾');
+    egg.id='eggLine';
+    hero.appendChild(egg);
+  }
+  const tags=el('div','tags');
+  r.tags.forEach(function(t,i){
+    tags.appendChild(el('span','tag'+(i===1?' moss':(i===2?' blush':'')),t));
+  });
+  hero.appendChild(tags);
+  const note=el('p','note');
+  note.appendChild(el('i',null,'对现在的你'));
+  note.appendChild(document.createTextNode(r.note));
+  hero.appendChild(note);
+  root.appendChild(hero);
+
+  const run=el('section','card');
+  const row=el('div','runner');
+  const sm=el('div','elk-mark sm');
+  sm.innerHTML=elkMark(r.runnerId);
+  row.appendChild(sm);
+  const txt=el('div');
+  txt.appendChild(el('div','who','也有一点'));
+  const rn=el('strong',null,r.runnerName);
+  rn.id='runnerName';
+  txt.appendChild(rn);
+  txt.appendChild(el('p',null,r.runnerHalf));
+  row.appendChild(txt);
+  run.appendChild(row);
+  root.appendChild(run);
+
+  const radar=el('section','card');
+  radar.id='radarCard';
+  radar.appendChild(el('h2','st','麋鹿轮廓'));
+  const box=el('div','radar-box');
+  box.innerHTML=radarSVG(r);
+  radar.appendChild(box);
+  const grid=el('div','score-grid');
+  DIM_IDS.forEach(function(id){
+    const block=el('div','dim-read');
+    const h=el('div','dim-head');
+    h.appendChild(el('span','dn',DIM_META[id].name));
+    const ds=el('span','ds');
+    ds.appendChild(document.createTextNode(String(r.scores[id])));
+    ds.appendChild(el('em',null,bandLabel(r.scores[id])));
+    h.appendChild(ds);
+    block.appendChild(h);
+    const track=el('div','bar-track');
+    const fill=el('div','bar-fill');
+    fill.style.width=r.scores[id]+'%';
+    track.appendChild(fill);
+    block.appendChild(track);
+    block.appendChild(el('p',null,dimRead(id,r.scores[id])));
+    grid.appendChild(block);
+  });
+  radar.appendChild(grid);
+  radar.appendChild(el('p','fine','外圈是 100。靠近外圈，只说明这一侧面近来更明显。偏高、中等、偏低都不是品级。牵引与交付可以同时高，也可以同时低。'));
+  root.appendChild(radar);
+
+  const feat=el('section','card');
+  feat.appendChild(el('h2','st','你这只麋鹿'));
+  feat.appendChild(bulletList(r.traits,''));
+  root.appendChild(feat);
+
+  const oth=el('section','card');
+  oth.appendChild(el('h2','st','靠近你的人会发现'));
+  oth.appendChild(bulletList(r.others,'moss'));
+  root.appendChild(oth);
+
+  const adv=el('section','card');
+  adv.appendChild(el('h2','st','相处 / 自处小建议'));
+  adv.appendChild(bulletList(r.advice,'blush'));
+  root.appendChild(adv);
+
+  root.appendChild(el('p','foot-label','请先读这里'));
+  const disc=el('p','disclaimer');
+  fillDisclaimer(disc);
+  root.appendChild(disc);
+  const safe=el('p','safety');
+  fillSafety(safe);
+  root.appendChild(safe);
+  root.appendChild(el('p','shop-sign','测测日记'));
+}
+function resultText(r){
+  const lines=[
+    '我是「'+r.name+'」· 麋鹿匹配度 '+r.similarity+'%｜'+r.punch+'。你敢测吗？'
+  ];
+  if(r.brewing) lines.push('这夜的森林还在起雾');
+  lines.push('也有一点「'+r.runnerName+'」· '+r.runnerHalf);
+  lines.push('麋鹿轮廓：'+DIM_IDS.map(function(id){return DIM_META[id].name+' '+r.scores[id]}).join(' / '));
+  lines.push('测测日记 · '+PAGE_URL);
+  return lines.join('\n');
+}
+function copyText(){
+  if(!current) return;
+  const text=resultText(current);
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){toast('已复制结果文案')}).catch(function(){fallbackCopy(text)});
+  }else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  const ta=document.createElement('textarea');
+  ta.value=text;
+  ta.setAttribute('readonly','');
+  ta.style.position='fixed';
+  ta.style.left='-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try{document.execCommand('copy');toast('已复制结果文案')}catch(e){toast('复制失败，请长按文字手动复制')}
+  document.body.removeChild(ta);
+}
+function clearQuizDom(){
+  const ids=['qtext','opts','qprompt','qno','qprog'];
+  ids.forEach(function(id){const n=$(id); if(n) n.textContent=''});
+  const fill=$('fill'); if(fill) fill.style.width='0';
+}
+function renderQ(){
+  if(!isAgeOk() || !isUnlocked()){
+    clearQuizDom();
+    show('start');
+    return;
+  }
+  const total=deck.length;
+  const q=deck[qi];
+  $('qprog').textContent=(qi+1)+' / '+total;
+  $('fill').style.width=(((qi+1)/total)*100)+'%';
+  $('qprev').hidden=qi<=0;
+  $('qno').textContent='第 '+(qi+1)+' 题';
+  $('qprompt').textContent=PROMPT_TEXT;
+  const qt=$('qtext');
+  qt.textContent=q.text;
+  qt.dataset.qid=q.id;
+  const box=$('opts');
+  box.textContent='';
+  CHOICES.forEach(function(c){
+    const b=el('button','opt');
+    b.type='button';
+    b.dataset.v=String(c.v);
+    b.appendChild(el('span','onum',String(c.v)));
+    b.appendChild(document.createTextNode(c.t));
+    if(ans[q.id]===c.v) b.classList.add('sel');
+    b.onclick=function(){pick(c.v)};
+    box.appendChild(b);
+  });
+}
+function cancelAdvance(){tick++; picking=false}
+function pick(v){
+  if(picking) return;
+  if(!isAgeOk() || !isUnlocked()){clearQuizDom(); show('start'); return}
+  picking=true;
+  const q=deck[qi];
+  ans[q.id]=v;
+  renderQ();
+  const my=++tick;
+  setTimeout(function(){
+    if(my!==tick) return;
+    if(!isAgeOk() || !isUnlocked()){picking=false; clearQuizDom(); show('start'); return}
+    if(qi<deck.length-1){qi++; picking=false; renderQ()}
+    else {picking=false; finish()}
+  },160);
+}
+function finish(){
+  const scores=scoreFromMap(ans);
+  if(!scores){
+    toast('这轮还没答完');
+    show('quiz');
+    return;
+  }
+  show('loading');
+  setTimeout(function(){
+    const report=analyze(scores);
+    try{
+      localStorage.setItem(LAST_KEY, JSON.stringify({
+        L:report.scores.L,Y:report.scores.Y,H:report.scores.H,
+        R:report.scores.R,E:report.scores.E,S:report.scores.S,
+        elkId:report.elkId,name:report.name,similarity:report.similarity,
+        at:Date.now()
+      }));
+    }catch(e){}
+    refreshLastBtn();
+    renderResult(report);
+    show('result');
+  },720);
+}
+function isAgeOk(){
+  try{if(sessionStorage.getItem(AGE_KEY)==='1') return true}catch(e){}
+  return ageMem;
+}
+function setAgeOk(){
+  ageMem=true;
+  try{sessionStorage.setItem(AGE_KEY,'1')}catch(e){}
+  syncGate();
+}
+function isUnlocked(){
+  try{if(sessionStorage.getItem(ACCESS_KEY)==='1') return true}catch(e){}
+  return unlockMem;
+}
+function setUnlocked(code){
+  unlockMem=true;
+  if(code) codeMem=code;
+  try{
+    sessionStorage.setItem(ACCESS_KEY,'1');
+    if(code) sessionStorage.setItem(ACCESS_CODE_KEY,code);
+  }catch(e){}
+  syncGate();
+}
+function clearUnlock(){
+  unlockMem=false;
+  try{
+    sessionStorage.removeItem(ACCESS_KEY);
+    sessionStorage.removeItem(ACCESS_CODE_KEY);
+  }catch(e){}
+  syncGate();
+}
+function storedCode(){
+  try{
+    const c=sessionStorage.getItem(ACCESS_CODE_KEY);
+    if(c) return c;
+  }catch(e){}
+  return codeMem||'';
+}
+function syncGate(){
+  if(isAgeOk()) document.body.dataset.age='ok';
+  else delete document.body.dataset.age;
+  if(isUnlocked()) document.body.dataset.unlock='ok';
+  else delete document.body.dataset.unlock;
+  const quiz=$('quiz');
+  if(quiz){
+    if(isAgeOk() && isUnlocked()) quiz.removeAttribute('inert');
+    else quiz.setAttribute('inert','');
+  }
+}
+function normalizeCode(v){
+  return String(v||'')
+    .trim()
+    .replace(/[\uFF21-\uFF3A]/g, function(ch){return String.fromCharCode(ch.charCodeAt(0)-0xFF21+65)})
+    .replace(/[\uFF41-\uFF5A]/g, function(ch){return String.fromCharCode(ch.charCodeAt(0)-0xFF41+97)})
+    .replace(/[\uFF10-\uFF19]/g, function(ch){return String.fromCharCode(ch.charCodeAt(0)-0xFF10+48)})
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g,'');
+}
+function openAge(){
+  closeCodeModal();
+  $('ageMask').classList.add('show');
+  $('ageMask').setAttribute('aria-hidden','false');
+  document.body.classList.add('lock');
+  setTimeout(function(){const b=$('btnAgeOk'); if(b) b.focus()},40);
+}
+function closeAge(){
+  $('ageMask').classList.remove('show');
+  $('ageMask').setAttribute('aria-hidden','true');
+  if(!$('codeMask').classList.contains('show')) document.body.classList.remove('lock');
+}
+function openCodeModal(prefill){
+  if(!isAgeOk()){pendingIntent='code'; openAge(); return}
+  syncGate();
+  $('codeMask').classList.add('show');
+  $('codeMask').setAttribute('aria-hidden','false');
+  document.body.classList.add('lock');
+  setCodeError('');
+  const inp=$('codeInput');
+  if(prefill!=null) inp.value=prefill;
+  setTimeout(function(){inp.focus()},40);
+}
+function closeCodeModal(){
+  $('codeMask').classList.remove('show');
+  $('codeMask').setAttribute('aria-hidden','true');
+  document.body.classList.remove('lock');
+  setCodeError('');
+  refreshStartBtn();
+}
+function enter(intent){
+  pendingIntent=intent;
+  if(!isAgeOk()){openAge(); return}
+  proceed(intent);
+}
+function proceed(intent){
+  if(intent==='start' || intent==='code'){
+    if(isUnlocked()) startQuiz();
+    else openCodeModal(null);
+  }else if(intent==='url'){
+    openCodeModal(pendingCode);
+    tryUnlock(true);
+  }else if(intent==='last'){
+    showLast();
+  }
+}
+function startQuiz(){
+  if(!isAgeOk() || !isUnlocked()){
+    clearQuizDom();
+    show('start');
+    if(!isAgeOk()) openAge();
+    else openCodeModal(null);
+    return;
+  }
+  ans={}; qi=0; picking=false;
+  deck=shuffle(QS.slice());
+  closeCodeModal();
+  show('quiz');
+  renderQ();
+}
+function setCodeBusy(busy){
+  const btn=$('btnCodeOk');
+  btn.disabled=!!busy;
+  btn.textContent=busy?'验证中…':'开始答题';
+}
+function refreshLastBtn(){
+  let has=false;
+  try{has=!!localStorage.getItem(LAST_KEY)}catch(e){}
+  $('btnLast').hidden=!has;
+}
+function refreshStartBtn(){
+  const btn=$('btnStart');
+  if(!btn) return;
+  btn.textContent=isUnlocked()?'进入题目':'开始测试';
+}
+function clampScore(n){
+  n=Number(n);
+  if(!Number.isFinite(n)) return null;
+  return Math.max(0, Math.min(100, Math.round(n)));
+}
+function showLast(){
+  if(!isAgeOk()){pendingIntent='last'; openAge(); return}
+  let data=null;
+  try{data=JSON.parse(localStorage.getItem(LAST_KEY)||'null')}catch(e){data=null}
+  if(!data){toast('还没有上次结果'); refreshLastBtn(); return}
+  const scores={};
+  for(let i=0;i<DIM_IDS.length;i++){
+    const id=DIM_IDS[i];
+    const v=clampScore(data[id]);
+    if(v==null){toast('还没有上次结果'); refreshLastBtn(); return}
+    scores[id]=v;
+  }
+  renderResult(analyze(scores));
+  show('result');
+  toast('已打开上次结果，本次不扣次');
+}
+async function apiFetch(url, opts){
+  const ctl=new AbortController();
+  const timer=setTimeout(function(){ctl.abort()},12000);
+  try{return await fetch(url, Object.assign({}, opts, {signal:ctl.signal}))}
+  finally{clearTimeout(timer)}
+}
+async function redeemVault(code){
+  const r=await apiFetch(API_BASE+'/redeem',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({quiz:QUIZ_KEY, code:code})
+  });
+  let data=null;
+  try{data=await r.json()}catch(e){
+    if(r.status===404) return {ok:false, reason:'invalid'};
+    throw new Error('net');
+  }
+  if(!data || data.ok===false || data.error){
+    const err=(data && data.error) || 'net';
+    if(err==='exhausted') return {ok:false, reason:'exhausted'};
+    if(err==='invalid' || err==='not_found' || r.status===404) return {ok:false, reason:'invalid'};
+    return {ok:false, reason:err};
+  }
+  if(data.ok===true || typeof data.remaining==='number'){
+    return {ok:true, remaining:data.remaining, max:data.max||3};
+  }
+  return {ok:false, reason:'net'};
+}
+function friendlyReason(reason){
+  if(reason==='exhausted') return '这个验证码已经用完了（每个码可以测 3 次）';
+  if(reason==='invalid' || reason==='not_found') return '没有找到这个验证码，请再核对一下';
+  return '网络有点不稳定，请稍后再试';
+}
+async function tryUnlock(fromUrl){
+  if(!isAgeOk()){openAge(); return false}
+  if(codeBusy) return false;
+  const code=normalizeCode($('codeInput').value);
+  $('codeInput').value=code;
+  if(!code){
+    if(!fromUrl){const msg='请先填写验证码'; setCodeError(msg); toast(msg)}
+    return false;
+  }
+  if(!CODE_RE.test(code)){
+    const msg='验证码格式不太对，应为 EL 开头再加 4 位';
+    setCodeError(msg);
+    toast(msg);
+    return false;
+  }
+  codeBusy=true;
+  setCodeBusy(true);
+  setCodeError('');
+  try{
+    const out=await redeemVault(code);
+    if(out.ok){
+      setUnlocked(code);
+      const left=out.remaining;
+      toast(typeof left==='number' ? (left>0 ? ('验证成功，还可以测 '+left+' 次') : '验证成功，这是本码最后一次') : '验证成功');
+      startQuiz();
+      return true;
+    }
+    const msg=friendlyReason(out.reason);
+    setCodeError(msg);
+    toast(msg);
+    return false;
+  }catch(e){
+    const msg='网络有点不稳定，请稍后再试';
+    setCodeError(msg);
+    toast(msg);
+    return false;
+  }finally{
+    codeBusy=false;
+    setCodeBusy(false);
+  }
+}
+
+$('btnStart').onclick=function(){enter('start')};
+$('btnCodeEntry').onclick=function(){enter('code')};
+$('btnLast').onclick=function(){enter('last')};
+$('btnViewLast').onclick=function(){enter('last')};
+$('btnAgeOk').onclick=function(){
+  setAgeOk();
+  $('ageBlock').hidden=true;
+  closeAge();
+  proceed(pendingIntent||'start');
+};
+$('btnAgeNo').onclick=function(){
+  closeAge();
+  pendingIntent=null;
+  $('ageBlock').hidden=false;
+  clearQuizDom();
+  closeCodeModal();
+  show('start');
+};
+$('ageClose').onclick=function(){closeAge()};
+$('ageMask').addEventListener('click',function(e){if(e.target===$('ageMask')) closeAge()});
+$('btnCodeOk').onclick=function(){tryUnlock(false)};
+$('codeInput').addEventListener('keydown',function(e){if(e.key==='Enter') tryUnlock(false)});
+$('codeInput').addEventListener('input',function(){
+  setCodeError('');
+  const input=$('codeInput');
+  const v=input.value.toUpperCase();
+  if(v!==input.value){
+    const p=input.selectionStart;
+    input.value=v;
+    try{input.setSelectionRange(p,p)}catch(err){}
+  }
+});
+$('codeClose').onclick=closeCodeModal;
+$('codeMask').addEventListener('click',function(e){if(e.target===$('codeMask')) closeCodeModal()});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape') return;
+  if($('codeMask').classList.contains('show')) closeCodeModal();
+  else if($('ageMask').classList.contains('show')) closeAge();
+});
+$('qback').onclick=function(){
+  cancelAdvance();
+  clearQuizDom();
+  show('start');
+};
+$('qprev').onclick=function(){
+  if(picking||qi<=0) return;
+  qi--;
+  renderQ();
+};
+$('btnRetry').onclick=function(){
+  const pre=storedCode();
+  clearUnlock();
+  cancelAdvance();
+  ans={};
+  clearQuizDom();
+  show('start');
+  openCodeModal(pre);
+};
+$('btnCopy').onclick=copyText;
+
+fillDisclaimer($('startDisclaimer'));
+fillSafety($('startSafety'));
+$('ageCopy').textContent=AGE_TEXT;
+refreshLastBtn();
+syncGate();
+refreshStartBtn();
+(function bootFromUrl(){
+  try{
+    const u=new URL(location.href);
+    const raw=u.searchParams.get('code');
+    if(u.searchParams.has('code')){
+      u.searchParams.delete('code');
+      history.replaceState({},'',u.pathname+u.search+u.hash);
+    }
+    const c=normalizeCode(raw||'');
+    if(c && CODE_RE.test(c) && !isUnlocked()){
+      pendingCode=c;
+      enter('url');
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
