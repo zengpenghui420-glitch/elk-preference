@@ -212,7 +212,7 @@ body:has(#result.active) .toast{bottom:calc(168px + var(--sb))}
 .age-copy{font-size:14px;line-height:1.7;color:var(--ivory);text-align:left;margin-bottom:14px}
 .code-panel input{
   width:100%;padding:14px 12px;border:1.5px solid var(--line);border-radius:14px;
-  font-size:18px;letter-spacing:.18em;text-align:center;color:var(--ivory);
+  font-size:16px;letter-spacing:.04em;text-align:center;color:var(--ivory);
   background:#121613;outline:none
 }
 .code-panel input:focus{border-color:var(--gold)}
@@ -252,9 +252,8 @@ body:has(#result.active) .toast{bottom:calc(168px + var(--sb))}
   <div class="rule" aria-hidden="true"><i></i></div>
   <p class="sub">你敢测吗</p>
   <p class="light-note">成年向娱乐，非正式性心理评估。用森林、节奏和光线，看你亲近时更习惯怎样走。偏好没有高低，也不是任何鉴定。</p>
-  <p class="age-block" id="ageBlock" hidden>未满 18 岁不能进入本测试。题目和验证码都不会打开。</p>
+  <p class="age-block" id="ageBlock" hidden>未满 18 岁不能进入本测试。题目和订单号都不会打开。</p>
   <button class="btn-primary" id="btnStart" type="button">开始测试</button>
-  <button class="btn-ghost" id="btnCodeEntry" type="button">已有码，直接进入</button>
   <button class="btn-ghost" id="btnLast" type="button" hidden>查看上次结果</button>
   <p class="hint">本测试仅面向 18 岁以上成年人。进入前请确认你已满 18 周岁。作答只留在本机，不会作为答案上传。</p>
   <ul class="dim-intro">
@@ -330,11 +329,11 @@ body:has(#result.active) .toast{bottom:calc(168px + var(--sb))}
     <button class="code-close" id="codeClose" type="button" aria-label="关闭">×</button>
     <div class="code-panel" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
       <p class="code-kicker">测测日记</p>
-      <h3 id="codeTitle">输入验证码</h3>
-      <input id="codeInput" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="16" placeholder="EL****" aria-label="验证码">
+      <h3 id="codeTitle">输入订单号</h3>
+      <input id="codeInput" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="120" placeholder="订单号" aria-label="订单号">
       <p class="code-error" id="codeError" role="alert"></p>
       <button class="btn-primary" id="btnCodeOk" type="button">开始答题</button>
-      <p class="code-hint">每码可测 3 次。重新测试会再扣 1 次；查看上次结果不扣次。感到不适可以随时离开。</p>
+      <p class="code-hint">到小红书「我的订单」里复制订单号。每个订单号可以测 3 次。感到不适可以随时离开。</p>
     </div>
   </div>
 </div>
@@ -343,12 +342,23 @@ body:has(#result.active) .toast{bottom:calc(168px + var(--sb))}
 <noscript><p style="padding:24px;text-align:center">请开启 JavaScript 后使用本测验。</p></noscript>
 <script>
 'use strict';
-const API_BASE='https://snappy-tundra-7uesdvk.tmp.now';
+/* Orders use POST /order/redeem and GET /order/get on API_BASE.
+   Already-issued elk codes stay on this page's real path: POST /redeem {quiz,code}.
+   This file has never called GET /get, and it does not use Mantle. */
+const API_BASE='https://snappy-tundra-7uesdvk-zengpenghui420-glitch.vercel.app';
 const QUIZ_KEY='elk';
 const ACCESS_KEY='elk_unlocked';
 const ACCESS_CODE_KEY='elk_code';
+const KIND_KEY='elk_kind';
+const PHASE_KEY='elk_phase';
+const RESULT_KEY='elk_order_result';
+const ATTEMPT_KEY='elk_attempt';
+const DEVICE_KEY='elk_device';
 const LAST_KEY='elk_last_result';
 const AGE_KEY='elk_age_ok';
+const ORDER_TIMEOUT_MS=12000;
+const LOAD_TITLE='夜林正在把六条小径对齐';
+const LOAD_SUB='看看你是哪一只麋鹿';
 const CODE_RE=/^EL[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}$/i;
 const PAGE_URL='https://zengpenghui420-glitch.github.io/elk-preference/';
 const DISCLAIMER='本测试为面向成年人的娱乐向自我观察，非正式性心理测量或临床评估，不能替代专业心理咨询、性健康咨询或医疗建议。题目用隐喻和日常情景描述亲近时的节奏与表达习惯，不涉及具体行为指导，也不对任何人的偏好做道德评判。「麋鹿」只是一种趣味画像，结果会受当下心情与理解方式影响；图一乐、拿去分享都可以，别把它当成性取向鉴定、人格判决或关系诊断书。';
@@ -467,7 +477,7 @@ const ELKS=[
     note:'雾里最舒服的是肩并着肩。谁走太快，你都有权轻轻拉住袖口。'}
 ];
 
-let deck=[], qi=0, ans={}, picking=false, codeBusy=false, current=null, tick=0;
+let deck=[], qi=0, ans={}, picking=false, codeBusy=false, unlockBusy=false, current=null, tick=0;
 let pendingIntent=null, pendingCode='', ageMem=false, unlockMem=false, codeMem='';
 
 function $(id){return document.getElementById(id)}
@@ -493,6 +503,12 @@ function toast(msg){
   t.classList.add('show');
   clearTimeout(toast._tm);
   toast._tm=setTimeout(function(){t.classList.remove('show')},2400);
+}
+function setLoading(title, sub){
+  const t=document.querySelector('#loading .load-title');
+  const s=document.querySelector('#loading .load-sub');
+  if(t) t.textContent=title||LOAD_TITLE;
+  if(s) s.textContent=sub||LOAD_SUB;
 }
 function setCodeError(msg){const n=$('codeError'); if(n) n.textContent=msg||''}
 function itemScore(q,v){return q.rev?6-v:v}
@@ -838,12 +854,13 @@ function pick(v){
   picking=true;
   const q=deck[qi];
   ans[q.id]=v;
+  saveAttempt();
   renderQ();
   const my=++tick;
   setTimeout(function(){
     if(my!==tick) return;
     if(!isAgeOk() || !isUnlocked()){picking=false; clearQuizDom(); show('start'); return}
-    if(qi<deck.length-1){qi++; picking=false; renderQ()}
+    if(qi<deck.length-1){qi++; saveAttempt(); picking=false; renderQ()}
     else {picking=false; finish()}
   },160);
 }
@@ -854,18 +871,20 @@ function finish(){
     show('quiz');
     return;
   }
+  const report=analyze(scores);
+  try{
+    localStorage.setItem(LAST_KEY, JSON.stringify({
+      L:report.scores.L,Y:report.scores.Y,H:report.scores.H,
+      R:report.scores.R,E:report.scores.E,S:report.scores.S,
+      elkId:report.elkId,name:report.name,similarity:report.similarity,
+      at:Date.now()
+    }));
+  }catch(e){}
+  if(sessionKind()==='order') saveOrderResult();
+  refreshLastBtn();
+  setLoading(LOAD_TITLE, LOAD_SUB);
   show('loading');
   setTimeout(function(){
-    const report=analyze(scores);
-    try{
-      localStorage.setItem(LAST_KEY, JSON.stringify({
-        L:report.scores.L,Y:report.scores.Y,H:report.scores.H,
-        R:report.scores.R,E:report.scores.E,S:report.scores.S,
-        elkId:report.elkId,name:report.name,similarity:report.similarity,
-        at:Date.now()
-      }));
-    }catch(e){}
-    refreshLastBtn();
     renderResult(report);
     show('result');
   },720);
@@ -889,16 +908,44 @@ function setUnlocked(code){
   try{
     sessionStorage.setItem(ACCESS_KEY,'1');
     if(code) sessionStorage.setItem(ACCESS_CODE_KEY,code);
+    sessionStorage.setItem(KIND_KEY,'code');
+    sessionStorage.removeItem(PHASE_KEY);
+    sessionStorage.removeItem(RESULT_KEY);
+    sessionStorage.removeItem(ATTEMPT_KEY);
+  }catch(e){}
+  syncGate();
+}
+function setUnlockedOrder(orderId){
+  unlockMem=true;
+  codeMem=orderId;
+  try{
+    sessionStorage.setItem(ACCESS_KEY,'1');
+    sessionStorage.setItem(ACCESS_CODE_KEY,orderId);
+    sessionStorage.setItem(KIND_KEY,'order');
+    sessionStorage.setItem(PHASE_KEY,'running');
+    sessionStorage.removeItem(RESULT_KEY);
+    sessionStorage.removeItem(ATTEMPT_KEY);
   }catch(e){}
   syncGate();
 }
 function clearUnlock(){
   unlockMem=false;
+  codeMem='';
   try{
     sessionStorage.removeItem(ACCESS_KEY);
     sessionStorage.removeItem(ACCESS_CODE_KEY);
+    sessionStorage.removeItem(KIND_KEY);
+    sessionStorage.removeItem(PHASE_KEY);
+    sessionStorage.removeItem(RESULT_KEY);
+    sessionStorage.removeItem(ATTEMPT_KEY);
   }catch(e){}
   syncGate();
+}
+function sessionKind(){
+  try{return sessionStorage.getItem(KIND_KEY)||''}catch(e){return ''}
+}
+function sessionPhase(){
+  try{return sessionStorage.getItem(PHASE_KEY)||''}catch(e){return ''}
 }
 function storedCode(){
   try{
@@ -926,6 +973,259 @@ function normalizeCode(v){
     .replace(/[\uFF10-\uFF19]/g, function(ch){return String.fromCharCode(ch.charCodeAt(0)-0xFF10+48)})
     .toUpperCase()
     .replace(/[^A-Z0-9]/g,'');
+}
+function normalizeOrderId(raw){
+  let s=String(raw==null?'':raw);
+  if(s.length>400) s=s.slice(0,400);
+  s=s.normalize('NFKC').trim();
+  if((s.startsWith('"')&&s.endsWith('"'))||(s.startsWith("'")&&s.endsWith("'"))||(s.startsWith('`')&&s.endsWith('`'))||(s.startsWith('「')&&s.endsWith('」'))) s=s.slice(1,-1).trim();
+  s=s.toUpperCase();
+  s=s.replace(/[\s\u00A0]+/g,'');
+  s=s.replace(/[-_./\\·•:：]+/g,'');
+  return s;
+}
+function isRepeatingBlock(digits){
+  const sizes=[1,2,3,6,9];
+  for(let i=0;i<sizes.length;i++){
+    const size=sizes[i];
+    const block=digits.slice(0,size);
+    if(block.repeat(digits.length/size)===digits) return true;
+  }
+  return false;
+}
+function isPlusMinusOneMod10(digits){
+  const step=(digits.charCodeAt(1)-digits.charCodeAt(0)+10)%10;
+  if(step!==1&&step!==9) return false;
+  for(let i=1;i<digits.length;i++){
+    if((digits.charCodeAt(i)-digits.charCodeAt(i-1)+10)%10!==step) return false;
+  }
+  return true;
+}
+function orderFormatError(orderId){
+  if(!/^P\d{18}$/.test(orderId)) return 'invalid';
+  const digits=orderId.slice(1);
+  if(isRepeatingBlock(digits)||isPlusMinusOneMod10(digits)) return 'invalid';
+  return '';
+}
+function classifyInput(raw){
+  const trimmed=String(raw||'').trim();
+  if(!trimmed) return {type:'empty'};
+  const orderId=normalizeOrderId(raw);
+  if(/^P\d{18}$/.test(orderId)) return {type:'order', orderId:orderId};
+  if(/^P\d+$/.test(orderId)&&orderId.length>=10) return {type:'order-invalid'};
+  const code=normalizeCode(raw);
+  if(!code) return {type:'empty'};
+  if(/^P\d{10,}$/.test(code)) return {type:'order-invalid'};
+  if(CODE_RE.test(code)) return {type:'code', code:code};
+  if(/^EL/.test(code)) return {type:'code-invalid'};
+  return {type:'order-invalid'};
+}
+function usesOf(res){
+  if(!res) return null;
+  if(res.ok&&typeof res.uses==='number') return res.uses;
+  if(res.error==='not_found') return 0;
+  return null;
+}
+function decideTimeout(beforeUses, after){
+  if(!after) return 'giveup';
+  if(!after.ok&&after.error&&after.error!=='not_found') return 'return';
+  const afterUses=usesOf(after);
+  if(after.ok&&beforeUses!=null&&afterUses!=null&&afterUses>beforeUses) return 'accept';
+  if(after.ok&&beforeUses==null) return 'accept';
+  if(afterUses===0||(beforeUses!=null&&afterUses!=null&&afterUses===beforeUses)) return 'retry';
+  return 'giveup';
+}
+function orderFailText(res){
+  const e=res&&(res.error||res.reason);
+  if(e==='invalid') return '订单号格式不对，请到小红书「我的订单」里复制';
+  if(e==='bound_other_quiz') return '这个订单号已经用来测过别的测试了';
+  if(e==='exhausted') return '这个订单号的 3 次已经用完了';
+  if(e==='rate_limited') return '试的次数有点多，请稍后再试';
+  return '暂时验证不了，请稍后再试';
+}
+function orderSuccessText(res){
+  if(!res||typeof res.remaining!=='number') return '验证成功';
+  return res.remaining>0?('验证成功，还可以测 '+res.remaining+' 次'):'验证成功，这是最后一次';
+}
+function orderTimeoutMs(){
+  try{if(globalThis.__ORDER_TIMEOUT_MS) return globalThis.__ORDER_TIMEOUT_MS}catch(e){}
+  return ORDER_TIMEOUT_MS;
+}
+function reconcileWaitMs(){
+  try{if(globalThis.__ORDER_RECONCILE_MS!=null) return globalThis.__ORDER_RECONCILE_MS}catch(e){}
+  return 1200;
+}
+function sleep(ms){return new Promise(function(resolve){setTimeout(resolve, ms)})}
+function deviceId(){
+  try{
+    let id=localStorage.getItem(DEVICE_KEY);
+    if(id&&/^[A-Za-z0-9._:-]{8,128}$/.test(id)) return id;
+    const buf=new Uint8Array(16);
+    if(typeof crypto!=='undefined'&&crypto.getRandomValues) crypto.getRandomValues(buf);
+    else for(let i=0;i<buf.length;i++) buf[i]=Math.floor(Math.random()*256);
+    id=Array.from(buf, function(b){return b.toString(16).padStart(2,'0')}).join('');
+    localStorage.setItem(DEVICE_KEY, id);
+    return id;
+  }catch(e){return ''}
+}
+function orderHeaders(json){
+  const h={};
+  if(json) h['Content-Type']='application/json';
+  const id=deviceId();
+  if(id) h['X-Device-Id']=id;
+  return h;
+}
+async function orderFetch(url, opts){
+  const ctrl=new AbortController();
+  const timer=setTimeout(function(){ctrl.abort()}, orderTimeoutMs());
+  try{
+    let r;
+    try{r=await fetch(url, Object.assign({}, opts, {signal:ctrl.signal, cache:'no-store'}))}
+    catch(e){
+      const err=new Error('timeout');
+      err.timeout=true;
+      throw err;
+    }
+    const text=await r.text();
+    let data=null;
+    try{data=text?JSON.parse(text):null}catch(e){data=null}
+    if(!data||typeof data!=='object'||Array.isArray(data)){
+      const err=new Error('http '+r.status);
+      err.status=r.status;
+      if(r.status===500||r.status===502||r.status===503||r.status===504) err.timeout=true;
+      else err.unavailable=true;
+      throw err;
+    }
+    data.status=r.status;
+    if(r.status===404&&data.error==='not_found') return {ok:false, error:'not_found', status:404};
+    if(r.status===500||r.status===502||r.status===503||r.status===504){
+      const err=new Error('timeout');
+      err.timeout=true;
+      err.status=r.status;
+      throw err;
+    }
+    return data;
+  }finally{clearTimeout(timer)}
+}
+function orderGetUrl(orderId){
+  return API_BASE+'/order/get?quiz='+encodeURIComponent(QUIZ_KEY)+'&orderId='+encodeURIComponent(orderId);
+}
+async function peekOrder(orderId){
+  return orderFetch(orderGetUrl(orderId), {method:'GET', headers:orderHeaders(false)});
+}
+async function postRedeem(orderId){
+  return orderFetch(API_BASE+'/order/redeem', {
+    method:'POST',
+    headers:orderHeaders(true),
+    body:JSON.stringify({quiz:QUIZ_KEY, orderId:orderId})
+  });
+}
+async function reconcileTimeout(orderId, beforeUses){
+  let after=null;
+  try{after=await peekOrder(orderId)}catch(e){after=null}
+  let action=decideTimeout(beforeUses, after);
+  if(action==='retry'||action==='giveup'){
+    await sleep(reconcileWaitMs());
+    try{after=await peekOrder(orderId)}catch(e){}
+    const again=decideTimeout(beforeUses, after);
+    if(again==='accept'||again==='return'||again==='retry') action=again;
+  }
+  return {action:action, after:after};
+}
+async function redeemOrder(orderId){
+  const bad=orderFormatError(orderId);
+  if(bad) return {ok:false, error:bad};
+  let beforeUses=null;
+  try{
+    const before=await peekOrder(orderId);
+    if(before&&before.ok&&(before.remaining<=0||(typeof before.max==='number'&&typeof before.uses==='number'&&before.uses>=before.max))){
+      return {ok:false, error:'exhausted', remaining:0, max:before.max||3};
+    }
+    if(before&&!before.ok&&before.error&&before.error!=='not_found') return before;
+    beforeUses=usesOf(before);
+  }catch(e){
+    if(!(e&&(e.unavailable||e.timeout))) throw e;
+  }
+  async function once(){
+    try{return {kind:'res', res:await postRedeem(orderId)}}
+    catch(e){if(e&&e.timeout) return {kind:'timeout'}; throw e}
+  }
+  let outcome=await once();
+  if(outcome.kind==='res') return outcome.res;
+  let rec=await reconcileTimeout(orderId, beforeUses);
+  if(rec.action==='accept'||rec.action==='return') return rec.after;
+  if(rec.action!=='retry'){const err=new Error('timeout'); err.timeout=true; throw err}
+  outcome=await once();
+  if(outcome.kind==='res') return outcome.res;
+  rec=await reconcileTimeout(orderId, beforeUses);
+  if(rec.action==='accept'||rec.action==='return') return rec.after;
+  const err=new Error('timeout');
+  err.timeout=true;
+  throw err;
+}
+function saveAttempt(){
+  if(sessionKind()!=='order'||!deck.length) return;
+  try{
+    sessionStorage.setItem(ATTEMPT_KEY, JSON.stringify({
+      deck:deck.map(function(q){return q.id}),
+      qi:qi,
+      ans:ans
+    }));
+  }catch(e){}
+}
+function clearAttempt(){
+  try{sessionStorage.removeItem(ATTEMPT_KEY)}catch(e){}
+}
+function readAttempt(){
+  try{
+    const s=JSON.parse(sessionStorage.getItem(ATTEMPT_KEY)||'null');
+    if(!s||!Array.isArray(s.deck)||s.deck.length!==QS.length) return null;
+    const want=QS.map(function(q){return q.id}).sort().join(',');
+    const got=s.deck.slice().sort().join(',');
+    if(want!==got) return null;
+    const at=Number(s.qi);
+    if(!Number.isInteger(at)||at<0||at>=QS.length) return null;
+    const next={};
+    const src=s.ans&&typeof s.ans==='object'?s.ans:{};
+    for(let i=0;i<QS.length;i++){
+      const id=QS[i].id;
+      if(src[id]==null) continue;
+      const v=src[id];
+      if(typeof v!=='number'||v<1||v>5) return null;
+      next[id]=v;
+    }
+    return {deck:s.deck, qi:at, ans:next};
+  }catch(e){return null}
+}
+function resumeAttempt(saved){
+  const byId={};
+  QS.forEach(function(q){byId[q.id]=q});
+  deck=saved.deck.map(function(id){return byId[id]});
+  qi=saved.qi;
+  ans=saved.ans||{};
+  picking=false;
+  tick++;
+  closeCodeModal();
+  show('quiz');
+  renderQ();
+}
+function saveOrderResult(){
+  if(sessionKind()!=='order') return;
+  try{
+    const snap={};
+    QS.forEach(function(q){snap[q.id]=ans[q.id]});
+    sessionStorage.setItem(RESULT_KEY, JSON.stringify({ans:snap}));
+    sessionStorage.setItem(PHASE_KEY,'result');
+  }catch(e){}
+  clearAttempt();
+}
+function readSavedResult(){
+  try{
+    const s=JSON.parse(sessionStorage.getItem(RESULT_KEY)||'null');
+    if(!s||!s.ans) return null;
+    if(!scoreFromMap(s.ans)) return null;
+    return s.ans;
+  }catch(e){return null}
 }
 function openAge(){
   closeCodeModal();
@@ -963,14 +1263,118 @@ function enter(intent){
   proceed(intent);
 }
 function proceed(intent){
-  if(intent==='start' || intent==='code'){
-    if(isUnlocked()) startQuiz();
-    else openCodeModal(null);
-  }else if(intent==='url'){
+  if(intent==='start') handlePrimary();
+  else if(intent==='code') openCodeModal(null);
+  else if(intent==='url'){
     openCodeModal(pendingCode);
     tryUnlock(true);
-  }else if(intent==='last'){
-    showLast();
+  }else if(intent==='restore') restoreOrderResult(false);
+  else if(intent==='retry') retryOrder();
+  else if(intent==='last') showLast();
+}
+function handlePrimary(){
+  if(!isAgeOk()){pendingIntent='start'; openAge(); return}
+  if(sessionKind()==='order'){
+    if(sessionPhase()==='running'){continueOrder(); return}
+    if(sessionPhase()==='result'){restoreOrderResult(true); return}
+    openCodeModal(null);
+    return;
+  }
+  if(isUnlocked()){startQuiz(); return}
+  openCodeModal(null);
+}
+async function continueOrder(){
+  if(!isAgeOk()){pendingIntent='start'; openAge(); return}
+  if(!isUnlocked()||sessionKind()!=='order'){openCodeModal(null); return}
+  const orderId=storedCode();
+  if(!orderId){clearUnlock(); openCodeModal(null); return}
+  if(unlockBusy) return;
+  unlockBusy=true;
+  setLoading('正在继续','正在核对订单号');
+  show('loading');
+  try{
+    const peek=await peekOrder(orderId);
+    if(!peek.ok){
+      if(peek.error==='not_found') clearUnlock();
+      toast(orderFailText(peek));
+      show('start');
+      return;
+    }
+    const saved=readAttempt();
+    if(saved) resumeAttempt(saved);
+    else startQuiz();
+  }catch(e){
+    toast('暂时验证不了，请稍后再试');
+    show('start');
+  }finally{
+    unlockBusy=false;
+    setLoading(LOAD_TITLE, LOAD_SUB);
+    refreshStartBtn();
+  }
+}
+async function restoreOrderResult(fromClick){
+  if(!isAgeOk()){pendingIntent='restore'; openAge(); return false}
+  if(sessionKind()!=='order') return false;
+  const saved=readSavedResult();
+  const orderId=storedCode();
+  if(!saved||!orderId){
+    if(fromClick) openCodeModal(null);
+    return false;
+  }
+  if(unlockBusy) return false;
+  unlockBusy=true;
+  setLoading('正在打开结果','正在核对订单号');
+  show('loading');
+  try{
+    const peek=await peekOrder(orderId);
+    if(!peek.ok){
+      if(peek.error==='not_found') clearUnlock();
+      else toast(orderFailText(peek));
+      show('start');
+      return false;
+    }
+    renderResult(analyze(scoreFromMap(saved)));
+    show('result');
+    return true;
+  }catch(e){
+    show('start');
+    toast('暂时验证不了，请稍后再试');
+    return false;
+  }finally{
+    unlockBusy=false;
+    setLoading(LOAD_TITLE, LOAD_SUB);
+    refreshStartBtn();
+  }
+}
+async function retryOrder(){
+  if(!isAgeOk()){pendingIntent='retry'; openAge(); return}
+  const orderId=storedCode();
+  if(sessionKind()!=='order'||!orderId){
+    clearUnlock();
+    show('start');
+    openCodeModal(null);
+    return;
+  }
+  if(unlockBusy||codeBusy) return;
+  unlockBusy=true;
+  const btn=$('btnRetry');
+  const prev=btn?btn.textContent:'';
+  if(btn){btn.disabled=true; btn.textContent='请稍候…'}
+  try{
+    const res=await redeemOrder(orderId);
+    if(!res||!res.ok){
+      toast(orderFailText(res));
+      return;
+    }
+    setUnlockedOrder(orderId);
+    toast(orderSuccessText(res));
+    startQuiz();
+  }catch(e){
+    toast('暂时验证不了，请稍后再试');
+  }finally{
+    if(btn){btn.disabled=false; btn.textContent=prev||'重新测试'}
+    unlockBusy=false;
+    refreshStartBtn();
   }
 }
 function startQuiz(){
@@ -986,6 +1390,7 @@ function startQuiz(){
   closeCodeModal();
   show('quiz');
   renderQ();
+  if(sessionKind()==='order') saveAttempt();
 }
 function setCodeBusy(busy){
   const btn=$('btnCodeOk');
@@ -1000,7 +1405,10 @@ function refreshLastBtn(){
 function refreshStartBtn(){
   const btn=$('btnStart');
   if(!btn) return;
-  btn.textContent=isUnlocked()?'进入题目':'开始测试';
+  if(sessionKind()==='order'&&sessionPhase()==='running') btn.textContent='继续测试';
+  else if(sessionKind()==='order'&&sessionPhase()==='result') btn.textContent='查看结果';
+  else if(isUnlocked()) btn.textContent='进入题目';
+  else btn.textContent='开始测试';
 }
 function clampScore(n){
   n=Number(n);
@@ -1058,28 +1466,49 @@ function friendlyReason(reason){
 }
 async function tryUnlock(fromUrl){
   if(!isAgeOk()){openAge(); return false}
-  if(codeBusy) return false;
-  const code=normalizeCode($('codeInput').value);
-  $('codeInput').value=code;
-  if(!code){
-    if(!fromUrl){const msg='请先填写验证码'; setCodeError(msg); toast(msg)}
+  if(codeBusy||unlockBusy) return false;
+  const cls=classifyInput($('codeInput').value);
+  if(cls.type==='empty'){
+    if(!fromUrl){const msg='请贴上订单号'; setCodeError(msg); toast(msg)}
     return false;
   }
-  if(!CODE_RE.test(code)){
+  if(cls.type==='code-invalid'){
     const msg='验证码格式不太对，应为 EL 开头再加 4 位';
     setCodeError(msg);
     toast(msg);
     return false;
   }
+  if(cls.type==='order-invalid'||(cls.type==='order'&&orderFormatError(cls.orderId))){
+    const msg=orderFailText({error:'invalid'});
+    setCodeError(msg);
+    toast(msg);
+    return false;
+  }
+  if(cls.type==='order') $('codeInput').value=cls.orderId;
+  if(cls.type==='code') $('codeInput').value=cls.code;
   codeBusy=true;
+  unlockBusy=true;
   setCodeBusy(true);
   setCodeError('');
   try{
-    const out=await redeemVault(code);
+    if(cls.type==='order'){
+      const res=await redeemOrder(cls.orderId);
+      if(res&&res.ok){
+        setUnlockedOrder(cls.orderId);
+        toast(orderSuccessText(res));
+        startQuiz();
+        return true;
+      }
+      const msg=orderFailText(res);
+      setCodeError(msg);
+      toast(msg);
+      return false;
+    }
+    const out=await redeemVault(cls.code);
     if(out.ok){
-      setUnlocked(code);
+      setUnlocked(cls.code);
       const left=out.remaining;
-      toast(typeof left==='number' ? (left>0 ? ('验证成功，还可以测 '+left+' 次') : '验证成功，这是本码最后一次') : '验证成功');
+      toast(typeof left==='number' ? (left>0 ? ('验证成功，还可以测 '+left+' 次') : '验证成功，这是最后一次') : '验证成功');
       startQuiz();
       return true;
     }
@@ -1088,18 +1517,18 @@ async function tryUnlock(fromUrl){
     toast(msg);
     return false;
   }catch(e){
-    const msg='网络有点不稳定，请稍后再试';
+    const msg=cls.type==='order'?'暂时验证不了，请稍后再试':'网络有点不稳定，请稍后再试';
     setCodeError(msg);
     toast(msg);
     return false;
   }finally{
     codeBusy=false;
+    unlockBusy=false;
     setCodeBusy(false);
   }
 }
 
 $('btnStart').onclick=function(){enter('start')};
-$('btnCodeEntry').onclick=function(){enter('code')};
 $('btnLast').onclick=function(){enter('last')};
 $('btnViewLast').onclick=function(){enter('last')};
 $('btnAgeOk').onclick=function(){
@@ -1145,9 +1574,11 @@ $('qback').onclick=function(){
 $('qprev').onclick=function(){
   if(picking||qi<=0) return;
   qi--;
+  saveAttempt();
   renderQ();
 };
 $('btnRetry').onclick=function(){
+  if(sessionKind()==='order'){retryOrder(); return}
   const pre=storedCode();
   clearUnlock();
   cancelAdvance();
@@ -1164,7 +1595,8 @@ $('ageCopy').textContent=AGE_TEXT;
 refreshLastBtn();
 syncGate();
 refreshStartBtn();
-(function bootFromUrl(){
+(function boot(){
+  let urlRaw='';
   try{
     const u=new URL(location.href);
     const raw=u.searchParams.get('code');
@@ -1172,12 +1604,17 @@ refreshStartBtn();
       u.searchParams.delete('code');
       history.replaceState({},'',u.pathname+u.search+u.hash);
     }
-    const c=normalizeCode(raw||'');
-    if(c && CODE_RE.test(c) && !isUnlocked()){
-      pendingCode=c;
-      enter('url');
-    }
+    urlRaw=raw||'';
   }catch(e){}
+  if(urlRaw&&!isUnlocked()){
+    pendingCode=urlRaw;
+    enter('url');
+    return;
+  }
+  if(sessionKind()==='order'&&isAgeOk()&&isUnlocked()){
+    if(sessionPhase()==='result') restoreOrderResult(false);
+    else if(sessionPhase()==='running') continueOrder();
+  }
 })();
 </script>
 </body>
