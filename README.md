@@ -17,12 +17,13 @@ https://zengpenghui420-glitch.github.io/elk-preference/
 | 计分 | 每维 3 题，其中 1 题反向（`6−v`）；维分 `(mean−1)/4×100`。档位 0–33 低、34–66 中、67–100 高，只用于匹配，不对用户展示字母档 |
 | 结果 | 主导麋鹿画像 + 匹配度% + 次近画像 + 名为「麋鹿轮廓」的六维雷达 + 特征 / 他人视角 / 相处建议 |
 | 类型 | 12 种原创麋鹿画像，按六维 L/M/H 向量的曼哈顿距离匹配。偏好没有高低对错 |
-| 年龄 | 封面先确认满 18 岁（`sessionStorage` `elk_age_ok`）。未确认不能打开验证码，也不能看到题目。关闭标签后需重新确认 |
-| 验证码 | `EL` + 4 位，字符表 `ABCDEFGHJKMNPQRSTUVWXYZ23456789`；每码 3 次 |
-| 接口 | `https://snappy-tundra-7uesdvk.tmp.now` ，`POST /redeem`，JSON `{quiz:"elk", code}`；**不接 Mantle** |
-| 重新测试 | 清除会话解锁 → 再弹码 → redeem（扣 1 次）。本次会话的年龄确认保留 |
-| 查看上次 | 只读本机 `elk_last_result`，不请求 redeem、不扣次 |
-| 隐私 | 作答留在本机浏览器，不会作为答案上传。验证请求只提交测验键和验证码 |
+| 年龄 | 封面先确认满 18 岁（`sessionStorage` `elk_age_ok`）。未确认不能打开订单号，也不能看到题目。关闭标签后需重新确认 |
+| 订单号 | 小红书「我的订单」复制。`P` + 18 位数字，一单只绑 `elk`，最多 3 次。开始新一次扣 1 次；同一次里刷新、继续、看结果只读不扣；再测才再扣。第 4 次拒绝，已有结果还在。不是付款核验 |
+| 已发出的验证码 | 页面不宣传。格式仍是 `EL` + 4 位（字符表 `ABCDEFGHJKMNPQRSTUVWXYZ23456789`）。提交后仍走本页原来的 `POST /redeem`，JSON `{quiz:"elk", code}`。本页从未调用 `GET /get`，也不接 Mantle |
+| 接口 | `https://snappy-tundra-7uesdvk-zengpenghui420-glitch.vercel.app`（无尾斜杠）。订单号：`POST /order/redeem` body `{quiz:"elk", orderId}` 扣次；`GET /order/get?quiz=elk&orderId=` 只读。超时先 peek，次数没增加才再扣一次 |
+| 重新测试 | 订单号再调一次 `POST /order/redeem`。已发出的验证码仍是清会话后再 `POST /redeem`。本次会话的年龄确认保留 |
+| 查看上次 | 只读本机 `elk_last_result`，不请求扣次。订单号同一次结果刷新走 `GET /order/get`，不扣次 |
+| 隐私 | 作答留在本机浏览器，不会作为答案上传。订单号请求只提交测验键和订单号；已发出的验证码仍只提交测验键和验证码 |
 
 ## 18+ 与免责
 
@@ -45,7 +46,7 @@ https://zengpenghui420-glitch.github.io/elk-preference/
 python3 -m http.server 8080
 ```
 
-浏览器打开 http://127.0.0.1:8080/ 。未确认满 18 岁时，点「开始测试」或「已有码，直接进入」只会先出现年龄确认，题目和验证码框都不会出现。确认年龄后才会要求验证码。未解锁时题目不会进入作答屏。「查看上次结果」只在本机有过结果时出现在封面上，且只读本地缓存。
+浏览器打开 http://127.0.0.1:8080/ 。未确认满 18 岁时，点「开始测试」只会先出现年龄确认，题目和订单号框都不会出现。确认年龄后才会要求订单号。未解锁时题目不会进入作答屏。「查看上次结果」只在本机有过结果时出现在封面上，且只读本地缓存。
 
 ## GitHub Pages
 
