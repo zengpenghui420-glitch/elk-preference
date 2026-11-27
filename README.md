@@ -18,12 +18,16 @@ https://zengpenghui420-glitch.github.io/elk-preference/
 | 结果 | 主导麋鹿画像 + 匹配度% + 次近画像 + 名为「麋鹿轮廓」的六维雷达 + 特征 / 他人视角 / 相处建议 |
 | 类型 | 12 种原创麋鹿画像，按六维 L/M/H 向量的曼哈顿距离匹配。偏好没有高低对错 |
 | 年龄 | 封面先确认满 18 岁（`sessionStorage` `elk_age_ok`）。未确认不能打开订单号，也不能看到题目。关闭标签后需重新确认 |
-| 订单号 | 小红书「我的订单」复制。`P` + 18 位数字，一单只绑 `elk`，最多 3 次。开始新一次扣 1 次；同一次里刷新、继续、看结果只读不扣；再测才再扣。第 4 次拒绝，已有结果还在。不是付款核验 |
-| 已发出的验证码 | 页面不宣传。格式仍是 `EL` + 4 位（字符表 `ABCDEFGHJKMNPQRSTUVWXYZ23456789`）。提交后仍走本页原来的 `POST /redeem`，JSON `{quiz:"elk", code}`。本页从未调用 `GET /get`，也不接 Mantle |
-| 接口 | `https://snappy-tundra-7uesdvk-zengpenghui420-glitch.vercel.app`（无尾斜杠）。订单号：`POST /order/redeem` body `{quiz:"elk", orderId}` 扣次；`GET /order/get?quiz=elk&orderId=` 只读。超时先 peek，次数没增加才再扣一次 |
-| 重新测试 | 订单号再调一次 `POST /order/redeem`。已发出的验证码仍是清会话后再 `POST /redeem`。本次会话的年龄确认保留 |
-| 查看上次 | 只读本机 `elk_last_result`，不请求扣次。订单号同一次结果刷新走 `GET /order/get`，不扣次 |
-| 隐私 | 作答留在本机浏览器，不会作为答案上传。订单号请求只提交测验键和订单号；已发出的验证码仍只提交测验键和验证码 |
+| 订单号 | 小红书「我的订单」复制。只接受 `P` + 18 位数字。重复块、逐位 ±1、19 位显示「订单号格式不对」，不开始 |
+| 通过 | 格式通过后立刻开始。不向订单服务发请求，也不在服务端绑定、限流或计数，也不证明已经付款 |
+| 提示 | 第一次开始是「验证成功，还可以测 2 次」。点「重新测试」后是「还可以测 1 次」，再点是「这是最后一次」 |
+| 不改提示 | 刷新、继续这一次、结果刷新、查看上次结果都不改变这句提示 |
+| 三次之后 | 同一订单号仍可进入，提示「验证成功」 |
+| 已发出的验证码 | 页面不宣传。格式仍是 `EL` + 4 位（字符表 `ABCDEFGHJKMNPQRSTUVWXYZ23456789`）。提交后仍走本页原来的 `POST /redeem`，JSON `{quiz:"elk", code}`，按返回的剩余次数。本页从未调用 `GET /get`，也不接 Mantle |
+| 接口 | `https://snappy-tundra-7uesdvk-zengpenghui420-glitch.vercel.app`（无尾斜杠）。订单号不请求这里。已发出的验证码仍是 `POST /redeem` |
+| 重新测试 | 订单号再记一次提示并开始新的一轮。已发出的验证码仍是清会话后再 `POST /redeem`。本次会话的年龄确认保留 |
+| 查看上次 | 只读本机 `elk_last_result`，不改变订单号提示，也不扣验证码次数 |
+| 隐私 | 作答留在本机浏览器，不会作为答案上传。订单号不提交到服务器；已发出的验证码仍只提交测验键和验证码 |
 
 ## 18+ 与免责
 
@@ -39,6 +43,7 @@ https://zengpenghui420-glitch.github.io/elk-preference/
 - `.nojekyll` — 让 Pages 按静态文件发布，不走 Jekyll
 - `CODES.md` — 验证码格式与规则（无可卖码）
 - `tools/mint.sh` — 只打印 vault 造码用法，不生成、不写入真码
+- `tools/order-unlock.test.mjs` — 本地检查订单号与已发出的验证码（只用合成号码）
 
 ## 本地预览
 
